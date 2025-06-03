@@ -61,7 +61,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     return 0;
   }
   hWnd = CreateWindow(WND_CLASS_NAME,
-                      "first window",
+                      "kirby clock",
                       WS_OVERLAPPEDWINDOW,
                       CW_USEDEFAULT, CW_USEDEFAULT,
                       CW_USEDEFAULT, CW_USEDEFAULT,
