@@ -224,6 +224,7 @@ __inline MATR MatrMulMatr( MATR M1, MATR M2 )
     for (j = 0; j < 4; j++)
       for (k = 0; k < 4; k++)
         r.A[i][j] += M1.A[i][k] * M2.A[k][j];
+  return r;
 }
 
 __inline MATR MatrTranspose( MATR M )
@@ -234,6 +235,7 @@ __inline MATR MatrTranspose( MATR M )
   for (i = 0; i < 4; i++)
     for (j = 0; j < 4; j++)
       r.A[i][j] = M.A[j][i];
+  return r;
 }
 
 __inline DBL MatrDeterm3x3( DBL A11, DBL A12, DBL A13,

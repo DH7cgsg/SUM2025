@@ -85,7 +85,7 @@ VOID GLB_Init( DBL R )
     {
       GLB_Geom[i][j].X = R * sin(theta) * sin(phi);
       GLB_Geom[i][j].Y = R * cos(theta);
-      GLB_Geom[i][j].Z = R * cos(phi) * sin(theta);
+      GLB_Geom[i][j].Z = R * 3.7 * cos(phi) * sin(theta);
     }
 }
 VOID GLB_Resize( INT Ws, INT Hs ) //window sizes
