@@ -16,4 +16,5 @@ VOID GLB_Draw( HDC hDC, COLORREF color, INT s, DBL angle );
 VEC RotateX( VEC P, DBL angle);
 VEC RotateY( VEC P, DBL angle);
 VEC RotateZ( VEC P, DBL angle);
-VOID ChangeDist( DBL dist );
+VOID ChangeParam( INT val, INT index );
+INT GetParam( INT index );
