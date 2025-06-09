@@ -11,6 +11,8 @@
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
+#include "timer.h"
+
 
 
 static VEC GLB_Geom[GRID_H][GRID_W];
@@ -18,6 +20,7 @@ static POINT pnts[GRID_H][GRID_W];
 static INT GLB_Ws, GLB_Hs;
 static DBL ProjDist = 0.1, GLB_Wp, GLB_Hp, ProjSize = 0.1;
 static INT Params[4];
+static CHAR buf[30];
 
 
 
@@ -85,7 +88,7 @@ VOID GLB_Init( DBL R )
     {
       GLB_Geom[i][j].X = R * sin(theta) * sin(phi);
       GLB_Geom[i][j].Y = R * cos(theta);
-      GLB_Geom[i][j].Z = R * 3.7 * cos(phi) * sin(theta);
+      GLB_Geom[i][j].Z = R * cos(phi) * sin(theta);
     }
 }
 VOID GLB_Resize( INT Ws, INT Hs ) //window sizes
@@ -103,11 +106,18 @@ VOID GLB_Draw( HDC hDC, COLORREF color, INT s, DBL angle )
 {
   INT i, j;                     
   static POINT ps[4];
-  DBL t, xp, yp;
+  DBL t;
   VEC p;
   DBL phi, theta, a = 2, b = 2;
+  MATR m;
 
+  m = MatrIdentity();
   t = (DOUBLE)clock() / CLOCKS_PER_SEC;
+
+  m = MatrMulMatr(MatrMulMatr(MatrRotateX(30 * t), MatrRotateY(45 * t)), MatrRotateZ(60 * t));
+  m = MatrMulMatr(m, MatrView(VecSet(5, 5, 5), VecSet(0, 0, 0), VecSet(0, 1, 0)));
+  m = MatrMulMatr(m, MatrFrustum(-GLB_Wp / 2, GLB_Wp / 2, -GLB_Hp / 2, GLB_Hp / 2, ProjDist, 300));
+  
 
   if (!Params[2])
     SelectObject(hDC, GetStockObject(NULL_PEN));
@@ -117,6 +127,10 @@ VOID GLB_Draw( HDC hDC, COLORREF color, INT s, DBL angle )
   
   SelectObject(hDC, GetStockObject(DC_BRUSH));
   SetDCBrushColor(hDC, color);
+
+  SetBkMode(hDC, TRANSPARENT);
+  SetTextColor(hDC, RGB(255, 255, 0));
+  TextOut(hDC, 30, 30, buf, sprintf(buf, "FPS: %lf", FPS));
   
   for (i = 0, theta = 0; i < GRID_H; i++, theta += PI / (GRID_H - 1))
     for (j = 0, phi = 0; j < GRID_W; j++, phi += 2 * PI / (GRID_W - 1))
@@ -129,14 +143,17 @@ VOID GLB_Draw( HDC hDC, COLORREF color, INT s, DBL angle )
         p.Z *= (powf(cos(phi), b) * powf(sin(theta), a));
       }
         
-      p = RotateX(RotateY(RotateZ(p, t * 10), t * 20), t * 30); //rotate
-      p.Z -= Params[3];
+      //p = RotateX(RotateY(RotateZ(p, t * 10), t * 20), t * 30); //rotate
+      //p.Z -= Params[3];
+      p = VecMulMatr(p, m);
 
-      xp = p.X * ProjDist / -p.Z;
-      yp = p.Y * ProjDist / -p.Z; //projections
+      //xp = p.X * ProjDist / -p.Z;
+      //yp = p.Y * ProjDist / -p.Z; //projections
 
-      pnts[i][j].x = (LONG)(xp * (GLB_Ws / GLB_Wp) + GLB_Ws / 2); //scrseen
-      pnts[i][j].y = (LONG)(-yp * (GLB_Hs / GLB_Hp) + GLB_Hs / 2);
+      //pnts[i][j].x = (LONG)(xp * (GLB_Ws / GLB_Wp) + GLB_Ws / 2); //screen
+      //pnts[i][j].y = (LONG)(-yp * (GLB_Hs / GLB_Hp) + GLB_Hs / 2);
+      pnts[i][j].x = (LONG)((p.X + 1) * GLB_Ws / 2); //screen
+      pnts[i][j].y = (LONG)((-p.Y + 1) * GLB_Hs / 2);
     }
 
   for (i = 0; i < GRID_H - 1; i++) //polygons

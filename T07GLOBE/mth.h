@@ -8,6 +8,9 @@
 #define __mth_h_
  
 #include <math.h>
+#include <stdio.h>
+#include <windows.h>
+
  
 /* Pi math constant */
 #define PI 3.14159265358979323846
@@ -69,7 +72,7 @@ __inline VEC VecNeg( VEC V )
 
 __inline DBL VecDotVec( VEC V1, VEC V2 )
 {
-  return V1.X * V2.X + V1.Y * V2.Y;
+  return V1.X * V2.X + V1.Y * V2.Y + V1.Z * V2.Z;
 }
 
 __inline VEC VecCrossVec( VEC V1, VEC V2 )
@@ -97,7 +100,7 @@ __inline VEC VecNormalize( VEC V )
  
   if (len == 1 || len == 0)
     return V;
-  return VecDivNum(V, len);
+  return VecDivNum(V, sqrt(len));
 }
 
 __inline VEC PointTransform( VEC V, MATR M )
@@ -117,11 +120,11 @@ __inline VEC VectorTransform( VEC V, MATR M )
 __inline VEC VecMulMatr( VEC V, MATR M )
 {
   DBL w = V.X * M.A[0][3] + V.Y * M.A[1][3] + V.Z * M.A[2][3] + M.A[3][3];
- 
+
   return VecSet((V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0]) / w,
                 (V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1]) / w,
                 (V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]) / w);
-} 
+} /* End of 'VecMulMatr' function */
 
 
 /* Matrix functions */
@@ -361,15 +364,23 @@ __inline MATR MatrView( VEC Loc, VEC At, VEC Up1 )
       {-VecDotVec(Loc, Right), -VecDotVec(Loc, Up), VecDotVec(Loc, Dir), 1}
     }
   };
+
   return m;
 } /* End of 'MatrView' function */
 
-__inline MATR MatrFrustum( DBL l, DBL r, DBL b, DBL t, DBL n, DBL f)
+__inline MATR MatrFrustum( DBL L, DBL R, DBL B, DBL T, DBL N, DBL F )
 {
-  return MatrSet(2 * n / (r - l), 0, 0, 0,
-                 0, 2 * n / (t - b), 0, 0,
-                 (r + l) / (r - l), (t + b) / (t - b), (f + n) / (f - n) * -1, -1,
-                 0, 0, -1 * 2 * n * f / (f - n), 0);
+  MATR r =
+  {
+    {
+      {2 * N / (R - L), 0, 0, 0},
+      {0, 2 * N / (T - B), 0, 0},
+      {(R + L) / (R - L), (T + B) / (T - B), (F + N) / (N - F), -1},
+      {0, 0, 2 * N * F / (N - F), 0}
+    }
+  };
+
+  return r;
 }
 
 

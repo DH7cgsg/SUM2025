@@ -7,8 +7,8 @@
  */
 #include <windows.h>
 #include "mth.h"
-#define GRID_W 50
-#define GRID_H 41
+#define GRID_W 29
+#define GRID_H 31
 
 VOID GLB_Init( DBL R );
 VOID GLB_Resize( INT Ws, INT Hs );

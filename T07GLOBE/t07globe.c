@@ -11,6 +11,7 @@
 #include <time.h>
 #include "globe.h"
 #include "mth.h"
+#include "timer.h"
 #include <stdio.h>
 #define WND_CLASS_NAME "clock window"
 LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
@@ -78,14 +79,14 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   WNDCLASS wc;
   HWND hWnd;
   MSG msg;
-  MATR m1 = MatrSet(1, 2, 3, 4,
+  /*MATR m1 = MatrSet(1, 2, 3, 4,
                     5, 6, 7, 8,
                     9, 10, 11, 12,
                     13, 14, 15, 16);
   MATR m2 = MatrSet(3, 3, 2, 1,
                     0, 2, 5, 6,
                     0, 0, 1, 3,
-                    0, 0, 0, 7);
+                    0, 0, 0, 7); */
 
 
   CONSOLE_FONT_INFOEX cfi = {0};
@@ -103,10 +104,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   freopen("CONOUT$", "w", stdout);
   system("@chcp 1251 > nul");
   printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 255, 255, 0, 0, 0, 0);
-  PrintMatrix("m1: ", m1);
-  printf("\n %lf", MatrDeterm(m2));
-  PrintMatrix("Inverse: ", MatrInverse(m2));
-  PrintMatrix("\n view: ", MatrView(VecSet(5,1,7), VecSet(-4, 0, -17), VecSet(1, 2, 73)));
+  
 
 
   wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -137,10 +135,17 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ShowWindow(hWnd, SW_SHOWNORMAL);
   
 
-  while (GetMessage(&msg, NULL, 0, 0))
+   /* Message loop */
+  while (TRUE)
   {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+      if (msg.message == WM_QUIT)
+        break;
+      DispatchMessage(&msg);
+    }
+    else
+      SendMessage(hWnd, WM_TIMER, 47, 0);
   }
   return msg.wParam;
 
@@ -181,6 +186,7 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
     hMemDC = CreateCompatibleDC(hDC);
     ReleaseDC(hWnd, hDC);
     GLB_Init(1.0);
+    GLB_TimerInit();
     SetTimer(hWnd, 0, 1, NULL);
     return 0;
   case WM_SIZE:
@@ -195,6 +201,7 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
     hBm = CreateCompatibleBitmap(hDC, W, H);
     ReleaseDC(hWnd, hDC);
 
+    SendMessage(hWnd, WM_TIMER, 47, 0);
     SelectObject(hMemDC, hBm);
     return 0;
 
@@ -215,30 +222,30 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
   case WM_KEYDOWN:
     if (wParam == VK_F11)
       FlipFullScreen(hWnd);
-    if (wParam == VK_F1)
+    /* if (wParam == VK_F1)
     {
       ChangeParam(1, 3);
       printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 0, 0, 255, 0, 0, 0);
-      printf("\log : Distancing by 1....\n");
+      printf("log : Distancing by 1....\n");
     }
     if (wParam == VK_F2)
     {
       ChangeParam(-1, 3);
       printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 0, 0, 255, 0, 0, 0);
-      printf("\log : Zooming in by 1....\n");
-    }
+      printf("log : Zooming in by 1....\n");
+    } */
     if (wParam == VK_F3)
     {
       
       printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 255, 0, 0, 0, 0, 0);
       if (!GetParam(0))
       {
-        printf("\log : Random colors enabled....\n");
+        printf("log : Random colors enabled....\n");
         ChangeParam(1, 0);
       }
       else
       {
-        printf("\log : Random colors disabled....\n");
+        printf("log : Random colors disabled....\n");
         ChangeParam(0, 0);
       }
     }
@@ -247,12 +254,12 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
       printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 0, 255, 0, 0, 0, 0);
       if (!GetParam(1))
       {
-        printf("\log : Form has been changed to shrinked....\n");
+        printf("log : Form has been changed to shrinked....\n");
         ChangeParam(1, 1);
       }
       else
       {
-        printf("\log : Form has been changed to default....\n");
+        printf("log : Form has been changed to default....\n");
         ChangeParam(0, 1);
       }
     }
@@ -261,16 +268,17 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
       printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 255, 0, 255, 0, 0, 0);
       if (!GetParam(2))
       {
-        printf("\log : Lines have been enabled....\n");
+        printf("log : Lines have been enabled....\n");
         ChangeParam(1, 2);
       }
       else
       {
-        printf("\log : Lines have been disabled....\n");
+        printf("log : Lines have been disabled....\n");
         ChangeParam(0, 2);
       }
     }
   case WM_TIMER:
+    GLB_TimerResponse();
     InvalidateRect(hWnd, NULL, TRUE);
     return 0;
   case WM_ERASEBKGND:
