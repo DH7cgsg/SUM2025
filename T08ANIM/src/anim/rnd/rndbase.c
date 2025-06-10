@@ -63,9 +63,9 @@ VOID DH7_RndStart( VOID )
   Rectangle(DH7_hRndDCFrame, 0, 0, DH7_RndFrameW + 1, DH7_RndFrameH + 1);
   /* background clearing */
   
+  SelectObject(DH7_hRndDCFrame, GetStockObject(DC_PEN));
+  SetDCPenColor(DH7_hRndDCFrame, RGB(255, 255, 255));
 
-  SetDCBrushColor(DH7_hRndDCFrame, RGB(255, 255, 255));
-  Rectangle(DH7_hRndDCFrame, 500, 500, 700, 700);
 }
 
 VOID DH7_RndEnd( VOID )

@@ -15,16 +15,16 @@
 typedef struct tagdh7VERTEX
 {
   VEC P;
-} VERTEX;
+} dh7VERTEX;
 
-typedef struct tagdh7RPIM
+typedef struct tagdh7PRIM
 {
-  VERTEX *V;
+  dh7VERTEX *V;
   INT NumOfV;
-
   INT *I;
   INT NumOfI;
-} PRIM;
+  MATR Trans;
+} dh7PRIM;
 
 extern HWND DH7_hRndWnd;        /* Work window handle */
 extern HDC DH7_hRndDCFrame;     /* Work window memory device context  */
@@ -54,6 +54,16 @@ VOID DH7_RndEnd( VOID );
 
 VOID DH7_RndProjSet( VOID );
 VOID DH7_RndCamSet( VEC Loc, VEC At, VEC Up );
+
+/* Primitive handle functions */
+
+BOOL DH7_RndPrimCreate( dh7PRIM *Pr, INT NoofV, INT NoofI );
+VOID DH7_RndPrimFree( dh7PRIM *Pr );
+VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World );
+BOOL DH7_RndPrimLoad( dh7PRIM *Pr, CHAR *FileName );
+
+
+
 
 
 #endif __rnd_h_

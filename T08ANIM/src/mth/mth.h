@@ -20,7 +20,7 @@
  
 /* Base float point types */
 typedef double DBL;
-typedef double FLT;
+typedef float FLT;
  
 /* Space vector/point representation type */
 typedef struct tagVEC
@@ -119,7 +119,7 @@ __inline VEC VectorTransform( VEC V, MATR M )
 __inline VEC VecMulMatr( VEC V, MATR M )
 {
   DBL w = V.X * M.A[0][3] + V.Y * M.A[1][3] + V.Z * M.A[2][3] + M.A[3][3];
-
+ 
   return VecSet((V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0]) / w,
                 (V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1]) / w,
                 (V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]) / w);

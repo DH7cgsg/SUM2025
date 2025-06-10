@@ -5,13 +5,16 @@
  * PURPOSE    : anim
  *              Startup entry-point module.
  */
-  
-#include <windows.h>
-#include "def.h"
+
+#include <stdio.h>
+#include <time.h>
+
 #include "anim/rnd/rnd.h"
+
 #define WND_CLASS_NAME "window"
+
 LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
-                              WPARAM wParam, LPARAM lParam );
+                                 WPARAM wParam, LPARAM lParam );
 
 INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     CHAR *CmdLine, INT CmdShow )
@@ -19,11 +22,10 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   WNDCLASS wc;
   HWND hWnd;
   MSG msg;
+  CONSOLE_FONT_INFOEX cfi = {0};
 
   SetDbgMemHooks();
   
-  /*CONSOLE_FONT_INFOEX cfi = {0};
- 
   AllocConsole();
  
   SetConsoleTitle("debug");
@@ -36,7 +38,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   freopen("CONOUT$", "w", stdout);
   system("@chcp 1251 > nul");
-  printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 255, 255, 0, 0, 0, 0); */
+  printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 255, 255, 0, 0, 0, 0);
   
   wc.style = CS_HREDRAW | CS_VREDRAW;
   wc.cbWndExtra = 0;
@@ -88,6 +90,7 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
   HDC hDC;
   PAINTSTRUCT ps;
   MINMAXINFO *minmax;
+  static dh7PRIM Pr, PrCow;
   
   switch (Msg)
   {
@@ -100,6 +103,24 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
 
   case WM_CREATE:
     DH7_RndInit(hWnd);
+    /*if (DH7_RndPrimCreate(&Pr, 4, 6))
+    {
+      Pr.V[0].P = VecSet(0, 0, 0);
+      Pr.V[1].P = VecSet(2, 0, 0);
+      Pr.V[2].P = VecSet(0, 2, 0);
+      Pr.V[3].P = VecSet(2, 2, 0);
+ 
+      Pr.I[0] = 0;
+      Pr.I[1] = 1;
+      Pr.I[2] = 2;
+ 
+      Pr.I[3] = 2;
+      Pr.I[4] = 1;
+      Pr.I[5] = 3;
+    } */
+    if (!DH7_RndPrimLoad(&PrCow, "sova30.obj"))
+      return 0;
+    
     SetTimer(hWnd, 0, 1, NULL);
     return 0;
 
@@ -116,14 +137,19 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
 
   case WM_TIMER:
     DH7_RndStart();
+    //DH7_RndPrimDraw(&Pr, MatrRotateY(30 * clock() / 1000.0));
+    DH7_RndPrimDraw(&PrCow, MatrMulMatr(MatrTranslate(VecSet(0, fabs(sin(clock() / 100) * 3), 0)), MatrRotateY(30 * clock() / 1000)));
     DH7_RndEnd();
-    InvalidateRect(hWnd, NULL, FALSE);
+    hDC = GetDC(hWnd);
+    DH7_RndCopyFrame(hDC);
+    ReleaseDC(hWnd, hDC);
     return 0;
 
   case WM_ERASEBKGND:
     return 1;
 
   case WM_DESTROY:
+    DH7_RndPrimFree(&PrCow);
     DH7_RndClose();
     KillTimer(hWnd, 0);
     //fflush(stdout);
