@@ -118,7 +118,7 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
       Pr.I[4] = 1;
       Pr.I[5] = 3;
     } */
-    if (!DH7_RndPrimLoad(&PrCow, "sova30.obj"))
+    if (!DH7_RndPrimLoad(&PrCow, "Harley.obj"))
       return 0;
     
     SetTimer(hWnd, 0, 1, NULL);
@@ -138,7 +138,7 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
   case WM_TIMER:
     DH7_RndStart();
     //DH7_RndPrimDraw(&Pr, MatrRotateY(30 * clock() / 1000.0));
-    DH7_RndPrimDraw(&PrCow, MatrMulMatr(MatrTranslate(VecSet(0, fabs(sin(clock() / 100) * 3), 0)), MatrRotateY(30 * clock() / 1000)));
+    DH7_RndPrimDraw(&PrCow, MatrMulMatr(MatrScale(VecSet(0.01, 0.01, 0.01)), MatrRotateY(30 * clock() / 1000)));
     DH7_RndEnd();
     hDC = GetDC(hWnd);
     DH7_RndCopyFrame(hDC);
