@@ -9,10 +9,11 @@
 #ifndef __units_h_
 #define __units_h_
 
-#include "def.h"
+
 #include "anim/anim.h"
 
 
-dh7UNIT * DH7_UnitCreateBall( INT Size );
+dh7UNIT * DH7_UnitCreateBall( VOID );
+dh7UNIT * DH7_UnitCreateCTRL( VOID );
 
 #endif  /* __units_h_ */

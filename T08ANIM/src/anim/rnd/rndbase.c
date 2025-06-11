@@ -9,6 +9,8 @@
 #include "def.h"
 #include "rnd.h"
 
+static COLORREF color = RGB(255, 0, 255);
+
 /* Base render functions */
 
 VOID DH7_RndInit( HWND hWnd )
@@ -23,7 +25,7 @@ VOID DH7_RndInit( HWND hWnd )
   DH7_hRndBmFrame = NULL;
 
   DH7_RndResize(100, 100);
-  DH7_RndCamSet(VecSet(8, 8, 8), VecSet(0, 0, 0), VecSet(0, 1, 0));
+  DH7_RndCamSet(VecSet1(11), VecSet(0, 2, 0), VecSet(0, 1, 0));
 }
 
 VOID DH7_RndClose( VOID )
@@ -59,13 +61,18 @@ VOID DH7_RndStart( VOID )
 {
   SelectObject(DH7_hRndDCFrame, GetStockObject(NULL_PEN));
   SelectObject(DH7_hRndDCFrame, GetStockObject(DC_BRUSH));
-  SetDCBrushColor(DH7_hRndDCFrame, RGB(0, 0, 0));
+  SetDCBrushColor(DH7_hRndDCFrame, RGB(255, 255, 0));
   Rectangle(DH7_hRndDCFrame, 0, 0, DH7_RndFrameW + 1, DH7_RndFrameH + 1);
   /* background clearing */
+
   
   SelectObject(DH7_hRndDCFrame, GetStockObject(DC_PEN));
-  SetDCPenColor(DH7_hRndDCFrame, RGB(255, 255, 255));
+  SetDCPenColor(DH7_hRndDCFrame, color);
+}
 
+VOID DH7_RndChangeColor( COLORREF c )
+{
+  color = c;
 }
 
 VOID DH7_RndEnd( VOID )

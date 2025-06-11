@@ -12,6 +12,7 @@
 
 #define DH7_MAX_UNITS 1000
 
+
 typedef struct tagdh7UNIT dh7UNIT;
 typedef struct tagdh7ANIM dh7ANIM;
 
@@ -28,21 +29,38 @@ struct tagdh7UNIT
 };
 struct tagdh7ANIM
 {
+  /* Base anim variables */
   HWND hWnd;
   HDC hDC;
   INT W, H;
   dh7UNIT * Units[DH7_MAX_UNITS];
   INT NumOfUnits;
 
+  /* Time variables */
   DBL
-    GlobalTime, GlobalDeltaTime, /* Global time and interframe interval */
-    Time, DeltaTime,             /* Time with pause and interframe interval */
-    FPS;                         /* Frames per second value */
+    DH7_GlobalTime, DH7_GlobalDeltaTime, /* Global time and interframe interval */
+    DH7_Time, DH7_DeltaTime,             /* Time with pause and interframe interval */
+    DH7_FPS;                         /* Frames per second value */
   BOOL
-    IsPause;
+    DH7_IsPause;
+
+  /* Input variables */
+  BYTE DH7_Keys[256];      
+  BYTE DH7_KeysClick[256]; 
+  BYTE DH7_KeysOld[256];
+  INT DH7_Mx, DH7_My, DH7_Mz, DH7_Mdx, DH7_Mdy, DH7_Mdz;
+
+  /* color */
+  COLORREF DH7_Color;
+
+  /*camera */
+  VEC CamLoc;
+  VEC CamDir;
+
 };
 
 extern dh7ANIM DH7_Anim;
+extern INT DH7_MouseWheel;
 
 VOID DH7_AnimInit( HWND hWnd );
 VOID DH7_AnimClose( VOID );
@@ -53,6 +71,13 @@ VOID DH7_AnimFlipFullScreen( VOID );
 VOID DH7_AnimDoExit( VOID );
 
 VOID DH7_AnimAddUnit( dh7UNIT *Uni );
+dh7UNIT * DH7_AnimUnitCreate( INT Size );
+
+VOID DH7_TimerInit( VOID );
+VOID DH7_TimerResponse( VOID );
+
+VOID DH7_AnimInputInit( VOID );   
+VOID DH7_AnimInputResponse( VOID ); 
 
 
 

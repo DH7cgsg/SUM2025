@@ -6,10 +6,8 @@
  *              Startup entry-point module.
  */
 
-#include <stdio.h>
-#include <time.h>
 
-#include "anim/rnd/rnd.h"
+#include "units/units.h"
 
 #define WND_CLASS_NAME "window"
 
@@ -66,7 +64,11 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                       hInstance,
                       NULL);
   ShowWindow(hWnd, SW_SHOWNORMAL);
-  
+
+  /* Units initialization */
+
+  DH7_AnimAddUnit(DH7_UnitCreateBall());
+  DH7_AnimAddUnit(DH7_UnitCreateCTRL());
 
    /* Message loop */
   while (TRUE)
@@ -90,6 +92,8 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
   HDC hDC;
   PAINTSTRUCT ps;
   MINMAXINFO *minmax;
+  INT W, H;
+
   static dh7PRIM Pr, PrCow;
   
   switch (Msg)
@@ -102,46 +106,38 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
     return 0;
 
   case WM_CREATE:
-    DH7_RndInit(hWnd);
-    /*if (DH7_RndPrimCreate(&Pr, 4, 6))
-    {
-      Pr.V[0].P = VecSet(0, 0, 0);
-      Pr.V[1].P = VecSet(2, 0, 0);
-      Pr.V[2].P = VecSet(0, 2, 0);
-      Pr.V[3].P = VecSet(2, 2, 0);
- 
-      Pr.I[0] = 0;
-      Pr.I[1] = 1;
-      Pr.I[2] = 2;
- 
-      Pr.I[3] = 2;
-      Pr.I[4] = 1;
-      Pr.I[5] = 3;
-    } */
-    if (!DH7_RndPrimLoad(&PrCow, "Harley.obj"))
-      return 0;
+
+    DH7_AnimInit(hWnd);
     
     SetTimer(hWnd, 0, 1, NULL);
     return 0;
 
   case WM_SIZE:
-    DH7_RndResize(LOWORD(lParam), HIWORD(lParam));
+
+    H = HIWORD(lParam); //window sizes
+    W = LOWORD(lParam);
+    DH7_AnimResize(W, H);
+    
     SendMessage(hWnd, WM_TIMER, 47, 0);
+    return 0;
+
+  case WM_MOUSEWHEEL:
+    printf("mouse: %i\n", DH7_MouseWheel);
+    DH7_MouseWheel += (SHORT)HIWORD(wParam);
     return 0;
 
   case WM_PAINT:
     hDC = BeginPaint(hWnd, &ps);
-    DH7_RndCopyFrame(hDC);
+    DH7_AnimCopyFrame(hDC);
     EndPaint(hWnd, &ps);
     return 0;
 
   case WM_TIMER:
-    DH7_RndStart();
-    //DH7_RndPrimDraw(&Pr, MatrRotateY(30 * clock() / 1000.0));
-    DH7_RndPrimDraw(&PrCow, MatrMulMatr(MatrScale(VecSet(0.01, 0.01, 0.01)), MatrRotateY(30 * clock() / 1000)));
-    DH7_RndEnd();
+    
+    DH7_AnimRender();
+
     hDC = GetDC(hWnd);
-    DH7_RndCopyFrame(hDC);
+    DH7_AnimCopyFrame(hDC);
     ReleaseDC(hWnd, hDC);
     return 0;
 
@@ -149,11 +145,10 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
     return 1;
 
   case WM_DESTROY:
-    DH7_RndPrimFree(&PrCow);
-    DH7_RndClose();
+    DH7_AnimClose();
     KillTimer(hWnd, 0);
-    //fflush(stdout);
-    //FreeConsole();
+    fflush(stdout);
+    FreeConsole();
     PostQuitMessage(0);
     return 0;
   }

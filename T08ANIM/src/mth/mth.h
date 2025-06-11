@@ -44,6 +44,13 @@ __inline VEC VecSet( DBL X, DBL Y, DBL Z )
   return v;
 } /* End of 'VecSet' function */
 
+__inline VEC VecSet1( DBL A )
+{
+  VEC v = {A, A, A};
+ 
+  return v;
+} /* End of 'VecSet1' function */
+
 __inline VEC VecAddVec( VEC V1, VEC V2 )
 {
   return VecSet(V1.X + V2.X, V1.Y + V2.Y, V1.Z + V2.Z);

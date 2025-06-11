@@ -17,14 +17,7 @@ static UINT64
     PauseTime,    /* Time during pause period */
     TimePerSec,   /* Timer resolution */
     FrameCounter; /* Frames counter */
-
-DBL
-    GlobalTime, GlobalDeltaTime, /* Global time and interframe interval */
-    Time, DeltaTime,             /* Time with pause and interframe interval */
-    FPS;                         /* Frames per second value */
-BOOL
-    IsPause; 
-
+ 
 VOID DH7_TimerInit( VOID )
 {
   LARGE_INTEGER t;
@@ -34,8 +27,8 @@ VOID DH7_TimerInit( VOID )
   QueryPerformanceCounter(&t);
   StartTime = OldTime = OldTimeFPS = t.QuadPart;
   FrameCounter = 0;
-  IsPause = FALSE;
-  FPS = 30.0;
+  DH7_Anim.DH7_IsPause = FALSE;
+  DH7_Anim.DH7_FPS = 30.0;
   PauseTime = 0; 
 }
 
@@ -45,25 +38,25 @@ VOID DH7_TimerResponse( VOID )
  
   QueryPerformanceCounter(&t);
   /* Global time */
-  GlobalTime = (DBL)(t.QuadPart - StartTime) / TimePerSec;
-  GlobalDeltaTime = (DBL)(t.QuadPart - OldTime) / TimePerSec;
+  DH7_Anim.DH7_GlobalTime = (DBL)(t.QuadPart - StartTime) / TimePerSec;
+  DH7_Anim.DH7_GlobalDeltaTime = (DBL)(t.QuadPart - OldTime) / TimePerSec;
   /* Time with pause */
-  if (IsPause)
+  if (DH7_Anim.DH7_IsPause)
   {
-    DeltaTime = 0;
+    DH7_Anim.DH7_DeltaTime = 0;
     PauseTime += t.QuadPart - OldTime;
   }
   else
   {
-    DeltaTime = GlobalDeltaTime;
-    Time = (DBL)(t.QuadPart - PauseTime - StartTime) / TimePerSec;
+    DH7_Anim.DH7_DeltaTime = DH7_Anim.DH7_GlobalDeltaTime;
+    DH7_Anim.DH7_Time = (DBL)(t.QuadPart - PauseTime - StartTime) / TimePerSec;
   }
  
   /* FPS */
   FrameCounter++;
   if (t.QuadPart - OldTimeFPS > TimePerSec)
   {
-    FPS = FrameCounter * TimePerSec / (DBL)(t.QuadPart - OldTimeFPS);
+    DH7_Anim.DH7_FPS = FrameCounter * TimePerSec / (DBL)(t.QuadPart - OldTimeFPS);
     OldTimeFPS = t.QuadPart;
     FrameCounter = 0;
   }

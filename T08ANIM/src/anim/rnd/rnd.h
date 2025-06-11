@@ -49,6 +49,7 @@ VOID DH7_RndResize( INT W, INT H );
 VOID DH7_RndCopyFrame( HDC hDC );
 VOID DH7_RndStart( VOID );
 VOID DH7_RndEnd( VOID );
+VOID DH7_RndChangeColor( COLORREF c );
 
 /* Projection/camera functions */
 
