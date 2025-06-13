@@ -7,6 +7,9 @@
 
 #include "anim.h"
 
+#define DH7_GET_JOYSTIC_AXIS(A) \
+  (2.0 * (ji.dw ## A ## pos - jc.w ## A ## min) / (jc.w ## A ## max - jc.w ## A ## min) - 1)
+
 
 INT DH7_MouseWheel;
 
@@ -59,6 +62,35 @@ static VOID DH7_AnimJoystickInit( VOID )
 }
 static VOID DH7_AnimJoystickResponse( VOID )
 {
+  if (joyGetNumDevs() > 0)
+  {
+    JOYCAPS jc;
+ 
+    /* Get joystick info */
+    if (joyGetDevCaps(JOYSTICKID1, &jc, sizeof(jc)) == JOYERR_NOERROR)
+    {
+      JOYINFOEX ji;
+      INT i;
+ 
+      ji.dwSize = sizeof(JOYINFOEX);
+      ji.dwFlags = JOY_RETURNALL;
+      if (joyGetPosEx(JOYSTICKID1, &ji) == JOYERR_NOERROR)
+      {
+        /* Buttons */
+        for (i = 0; i < 32; i++)
+        {
+          DH7_Anim.JBut[i] = (ji.dwButtons >> i) & 1;
+          DH7_Anim.JButClick[i] = DH7_Anim.JBut[i] && !DH7_Anim.JButOld[i];
+          DH7_Anim.JButOld[i] = DH7_Anim.JBut[i];
+        }
+        /* Axes */
+        DH7_Anim.JX = DH7_GET_JOYSTIC_AXIS(X);
+        DH7_Anim.JY = DH7_GET_JOYSTIC_AXIS(Y);
+        DH7_Anim.JZ = DH7_GET_JOYSTIC_AXIS(Z);
+        DH7_Anim.JR = DH7_GET_JOYSTIC_AXIS(R);
+      }
+    }
+  }
 } 
 VOID DH7_AnimInputInit( VOID )
 {

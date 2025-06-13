@@ -10,11 +10,12 @@
 #include <stdio.h>
 
 #include "rnd.h"
+#include "anim/anim.h"
 
 VOID DH7_RndPrimCreate( dh7PRIM *Pr, dh7PRIM_TYPE Type, dh7VERTEX *V, INT NoofV, INT *I, INT NoofI )
-{
+{ 
   INT i;
-  
+
   memset(Pr, 0, sizeof(dh7PRIM));
 
   glGenVertexArrays(1, &Pr->VA);
@@ -40,12 +41,14 @@ VOID DH7_RndPrimCreate( dh7PRIM *Pr, dh7PRIM_TYPE Type, dh7VERTEX *V, INT NoofV,
     glEnableVertexAttribArray(3);
 
     glBindVertexArray(0);
+    
     Pr->MinBB = Pr->MaxBB = V[0].P;
     for (i = 1; i < NoofV; i++)
     {
       Pr->MinBB = VecMinVec(Pr->MinBB, V[i].P);
       Pr->MaxBB = VecMaxVec(Pr->MaxBB, V[i].P);
     }
+    
   }
 
   if (I != NULL && NoofI != 0)
@@ -58,7 +61,7 @@ VOID DH7_RndPrimCreate( dh7PRIM *Pr, dh7PRIM_TYPE Type, dh7VERTEX *V, INT NoofV,
   else
     Pr->NumOfElements = NoofV;
   
-  
+  Pr->Type = Type;
   Pr->Trans = MatrIdentity();
 }
 
@@ -101,40 +104,52 @@ VOID DH7_RndPrimTriMeshAutoNormals( dh7VERTEX *V, INT NumOfV, INT *Ind, INT NumO
   {
     FLT nl = VecDotVec(L, V[i].N);
     
-    V[i].C = Vec4SetVec3(VecMulNum(V[i].N, nl < 0.1 ? 0.1 : nl));
+    V[i].C = Vec4SetVec3(VecMulNum(VecSet(0, 0.5, 0), nl < 0.1 ? 0.1 : nl));
   }
 }
 
 
 VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
 {
-  
-  MATR M = MatrMulMatr(Pr->Trans, MatrMulMatr(World, DH7_RndMatrVP));
+  INT loc;
+  UINT ProgId = DH7_RndShaders[0].ProgId;
+  MATR 
+    w = MatrMulMatr(Pr->Trans, World),
+    winv = MatrTranspose(MatrInverse(w)),
+    M = MatrMulMatr(w, DH7_RndMatrVP);
+  INT gl_prim_type = Pr->Type == DH7_RND_PRIM_LINES ? GL_LINES :
+                     Pr->Type == DH7_RND_PRIM_TRIMESH ? GL_TRIANGLES :
+                     Pr->Type == DH7_RND_PRIM_TRISTRIP ? GL_TRIANGLE_STRIP :
+                     GL_POINTS;
 
-  glLoadMatrixf(M.A[0]);
+  //M = MatrMulMatr(Pr->Trans, MatrMulMatr(World, DH7_RndMatrVP)),
+  //glLoadMatrixf(M.A[0]);
+
+  if (ProgId == 0)
+    return;
+  glUseProgram(ProgId);
+  if ((loc = glGetUniformLocation(ProgId, "MatrWVP")) != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, M.A[0]);
+  if ((loc = glGetUniformLocation(ProgId, "Time")) != -1)
+    glUniform1f(loc, DH7_Anim.Time);
+  if ((loc = glGetUniformLocation(ProgId, "MatrW")) != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, w.A[0]);
+  if ((loc = glGetUniformLocation(ProgId, "MatrWinv")) != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, winv.A[0]);
 
   glBindVertexArray(Pr->VA);
   if (Pr->IBuf == 0)
   {
-    glDrawArrays(GL_TRIANGLES, 0, Pr->NumOfElements);
+    glDrawArrays(gl_prim_type, 0, Pr->NumOfElements);
     glBindVertexArray(0);
   }
   else
   {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Pr->IBuf);
-    glDrawElements(GL_TRIANGLES, Pr->NumOfElements, GL_UNSIGNED_INT, NULL);
+    glDrawElements(gl_prim_type, Pr->NumOfElements, GL_UNSIGNED_INT, NULL);
     glBindVertexArray(0);
   }
-  /*glBegin(GL_TRIANGLES);
-  for (i = 0; i < Pr->NumOfI; i++)
-  {
-    FLT nl = VecDotVec(L, Pr->V[Pr->I[i]].N);
-    VEC Color = VecMulNum(VecSet(1, 0, 1), nl < 0.1 ? 0.1 : nl);
- 
-    glColor3fv(&Color.X);
-    glVertex3fv(&Pr->V[Pr->I[i]].P.X);
-  }
-  glEnd(); */
+  glUseProgram(0);
 }
 BOOL DH7_RndPrimLoad( dh7PRIM *Pr, CHAR *FileName )
 {

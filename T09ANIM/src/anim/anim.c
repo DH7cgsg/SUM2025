@@ -56,7 +56,9 @@ VOID DH7_AnimRender( VOID )
   INT i;
   
   DH7_TimerResponse();
-  DH7_AnimInputResponse();
+  if (DH7_Anim.IsActive)
+    DH7_AnimInputResponse();
+  
   for (i = 0; i < DH7_Anim.NumOfUnits; i++)
     DH7_Anim.Units[i]->Response(DH7_Anim.Units[i], &DH7_Anim);
   DH7_RndStart();

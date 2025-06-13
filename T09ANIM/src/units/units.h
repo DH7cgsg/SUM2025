@@ -9,11 +9,14 @@
 #ifndef __units_h_
 #define __units_h_
 
+#define DH7_GET_JOYSTIC_AXIS(A) \
+  (2.0 * (ji.dw ## A ## pos - jc.w ## A ## min) / (jc.w ## A ## max - jc.w ## A ## min) – 1)
 
 #include "anim/anim.h"
 
 
 dh7UNIT * DH7_UnitCreateBall( VOID );
 dh7UNIT * DH7_UnitCreateCTRL( VOID );
+dh7UNIT * DH7_UnitCreateGRID( VOID );
 
 #endif  /* __units_h_ */

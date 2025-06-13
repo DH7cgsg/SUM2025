@@ -38,9 +38,13 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
   Uni->CamLoc =
     PointTransform(Uni->CamLoc,
       MatrRotateY(Ani->Keys[VK_LBUTTON] *
-                  Ani->DeltaTime * Ani->Mdx * 200));
+                  Ani->DeltaTime * Ani->Mdx * -200));
 
   DH7_RndCamSet(Uni->CamLoc, Uni->CamDir, VecSet(0, 1, 0));
+
+  
+
+
 
 }
 static VOID DH7_UnitRender( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )

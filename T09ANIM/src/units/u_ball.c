@@ -16,7 +16,7 @@ typedef struct
 
 static VOID DH7_UnitInit( dh7UNIT_BALL *Uni, dh7ANIM *Ani )
 {
-  DH7_RndPrimLoad(&Uni->Ball, "bin/models/Chevrolet_Aveo_Sonic_2012.obj");
+  DH7_RndPrimLoad(&Uni->Ball, "bin/models/btr.obj");
 }
 static VOID DH7_UnitResponse( dh7UNIT_BALL *Uni, dh7ANIM *Ani )
 {
@@ -29,8 +29,9 @@ static VOID DH7_UnitRender( dh7UNIT_BALL *Uni, dh7ANIM *Ani )
   m = MatrIdentity();
   //m = MatrMulMatr(MatrScale(VecSet1(0.001)), MatrRotateY(Ani->Time * 200));
   //m = MatrMulMatr(m, MatrTranslate(VecSet(0, 3 * fabs(sin(Ani->Time * 2)), 0)));
-  m = MatrMulMatr(m, MatrScale(VecSet1(0.001)));
+  m = MatrMulMatr(m, MatrScale(VecSet1(0.01)));
   m = MatrMulMatr(m, MatrTranslate(VecSet(Uni->Pos.X, Uni->Pos.Y, Uni->Pos.Z)));
+  m = MatrMulMatr(m, MatrRotateY(Ani->Time * Ani->JX * 150));
 
   DH7_RndPrimDraw(&Uni->Ball, m);
 }

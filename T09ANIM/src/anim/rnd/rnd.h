@@ -13,7 +13,7 @@
 #define GLEW_STATIC
 #include <glew.h>
 
-#include "def.h"
+#include "res/rndres.h"
 
 typedef struct tagdh7VERTEX
 {
@@ -28,12 +28,13 @@ typedef enum tagdh7PRIM_TYPE
   DH7_RND_PRIM_POINTS,   /* Array of points  – GL_POINTS */
   DH7_RND_PRIM_LINES,    /* Line segments (by 2 points) – GL_LINES */
   DH7_RND_PRIM_TRIMESH,  /* Triangle mesh - array of triangles – GL_TRIANGLES */
+  DH7_RND_PRIM_TRISTRIP,
 } dh7PRIM_TYPE;
 
 typedef struct tagdh7PRIM
 {
   dh7PRIM_TYPE Type; /* Primitive type */
-  INT
+  UINT
     VA,              /* Vertex array Id */
     VBuf,            /* Vertex buffer Id */
     IBuf;            /* Index buffer Id (if 0 - use only vertex buffer) */
@@ -42,6 +43,11 @@ typedef struct tagdh7PRIM
   MATR Trans;  /* Additional transformation matrix */
 } dh7PRIM;
 
+typedef struct tagdh7GRID
+{
+  INT W, H;      /* Grid size (in vertices) */
+  dh7VERTEX *V;  /* Array (2D) of vertex */
+} dh7GRID;
 
 
 
@@ -85,6 +91,15 @@ VOID DH7_RndPrimTriMeshAutoNormals( dh7VERTEX *V, INT NumOfV, INT *Ind, INT NumO
 VOID APIENTRY glDebugOutput( UINT Source, UINT Type, UINT Id, UINT Severity,
                              INT Length, const CHAR *Message,
                              const VOID *UserParam );
+
+
+BOOL DH7_RndGridCreate( dh7GRID *G, INT W, INT H );
+
+VOID DH7_RndGridFree( dh7GRID *G );
+
+VOID DH7_RndPrimFromGrid( dh7PRIM *Pr, dh7GRID *G );
+
+VOID DH7_RndGridAutoNormals( dh7GRID *G );
 
 
 

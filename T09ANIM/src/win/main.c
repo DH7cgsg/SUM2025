@@ -8,6 +8,7 @@
 
 
 #include "units/units.h"
+#include "anim/anim.h"
 
 #define WND_CLASS_NAME "window"
 
@@ -69,6 +70,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   DH7_AnimAddUnit(DH7_UnitCreateBall());
   DH7_AnimAddUnit(DH7_UnitCreateCTRL());
+  DH7_AnimAddUnit(DH7_UnitCreateGRID());
 
    /* Message loop */
   while (TRUE)
@@ -93,6 +95,7 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
   PAINTSTRUCT ps;
   MINMAXINFO *minmax;
   INT W, H;
+  static BOOL SaveActivity;
   
 
   static dh7PRIM Pr, PrCow;
@@ -126,8 +129,20 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
     DH7_MouseWheel += (SHORT)HIWORD(wParam);
     return 0;
 
+  case WM_ACTIVATE:
+    DH7_Anim.IsActive = LOWORD(wParam) != WA_INACTIVE;
+    return 0;
+
+  case WM_ENTERSIZEMOVE:
+    SaveActivity = DH7_Anim.IsActive;
+    DH7_Anim.IsActive = FALSE;
+    return 0;
+  case WM_EXITSIZEMOVE:
+    DH7_Anim.IsActive = SaveActivity;
+    return 0;
   case WM_PAINT:
     hDC = BeginPaint(hWnd, &ps);
+    DH7_AnimRender();
     DH7_AnimCopyFrame();
     EndPaint(hWnd, &ps);
     return 0;

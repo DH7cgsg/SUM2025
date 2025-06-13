@@ -207,10 +207,10 @@ __inline VEC VecMulMatr( VEC V, MATR M )
 
 /* Matrix functions */
 
-__inline MATR MatrSet(FLT A00, FLT A01, FLT A02, FLT A03,
-              FLT A10, FLT A11, FLT A12, FLT A13,
-              FLT A20, FLT A21, FLT A22, FLT A23,
-              FLT A30, FLT A31, FLT A32, FLT A33)
+__inline MATR MatrSet( FLT A00, FLT A01, FLT A02, FLT A03,
+                       FLT A10, FLT A11, FLT A12, FLT A13,
+                       FLT A20, FLT A21, FLT A22, FLT A23,
+                       FLT A30, FLT A31, FLT A32, FLT A33 )
 {
   MATR r =
   {
@@ -320,8 +320,8 @@ __inline MATR MatrTranspose( MATR M )
 }
 
 __inline FLT MatrDeterm3x3( FLT A11, FLT A12, FLT A13,
-                   FLT A21, FLT A22, FLT A23,
-                   FLT A31, FLT A32, FLT A33 )
+                            FLT A21, FLT A22, FLT A23,
+                            FLT A31, FLT A32, FLT A33 )
 {
   return A11 * A22 * A33 + A12 * A23 * A31 + A13 * A21 * A32 -
          A11 * A23 * A32 - A12 * A21 * A33 - A13 * A22 * A31;

@@ -241,6 +241,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\anim\rnd\rndgrid.c"
+						>
+					</File>
+					<File
 						RelativePath=".\src\anim\rnd\rndprim.c"
 						>
 					</File>
@@ -249,6 +253,22 @@
 						>
 						<File
 							RelativePath=".\src\anim\rnd\opengl\glew.c"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Resources"
+						>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndres.c"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndres.h"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndshd.c"
 							>
 						</File>
 					</Filter>
@@ -263,6 +283,10 @@
 				</File>
 				<File
 					RelativePath=".\src\units\u_ctrl.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_grid.c"
 					>
 				</File>
 				<File

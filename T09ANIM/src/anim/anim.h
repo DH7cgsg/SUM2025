@@ -35,6 +35,7 @@ struct tagdh7ANIM
   INT W, H;
   dh7UNIT * Units[DH7_MAX_UNITS];
   INT NumOfUnits;
+  BOOL IsActive;
 
   /* Time variables */
   DBL
@@ -44,11 +45,18 @@ struct tagdh7ANIM
   BOOL
     IsPause;
 
-  /* Input variables */
+  /* Keyboard and mouse variables */
   BYTE Keys[256];      
   BYTE KeysClick[256]; 
   BYTE KeysOld[256];
   INT Mx, My, Mz, Mdx, Mdy, Mdz;
+
+  /* Joystick variables */
+  BYTE
+    JBut[32], JButOld[32], JButClick[32]; /* Joystick button states */
+  INT JPov;                               /* Joystick point-of-view control [-1,0..7] */
+  DBL
+    JX, JY, JZ, JR;                       /* Joystick axes */
 };
 
 extern dh7ANIM DH7_Anim;
