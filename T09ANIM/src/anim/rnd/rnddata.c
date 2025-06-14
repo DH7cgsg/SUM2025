@@ -26,3 +26,11 @@ MATR
   DH7_RndMatrProj, /* Projection coordinate system matrix */
   DH7_RndMatrVP;   /* Stored (View * Proj) matrix */
 
+VEC 
+  DH7_RndCamLoc,
+  DH7_RndCamDir,
+  DH7_RndCamAt,
+  DH7_RndCamRight,
+  DH7_RndCamUp;
+
+

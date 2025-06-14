@@ -1,7 +1,7 @@
 /* FILE NAME  : rnd.h
  * PROGRAMMER : DH7
 
- * LAST UPDATE: 09.06.2025
+ * LAST UPDATE: 14.06.2025
  * PURPOSE    : anim
                 Rendering system declaration module
  *              
@@ -41,6 +41,7 @@ typedef struct tagdh7PRIM
   INT NumOfElements; /* Number of indices/vecrtices */
   VEC MinBB, MaxBB;  /* Bound box */
   MATR Trans;  /* Additional transformation matrix */
+  INT MtlNo; /* Material num */
 } dh7PRIM;
 
 typedef struct tagdh7GRID
@@ -65,6 +66,13 @@ extern MATR
   DH7_RndMatrView, /* View coordinate system matrix */
   DH7_RndMatrProj, /* Projection coordinate system matrix */
   DH7_RndMatrVP;   /* Stored (View * Proj) matrix */
+
+extern VEC
+  DH7_RndCamLoc,
+  DH7_RndCamDir,
+  DH7_RndCamAt,
+  DH7_RndCamRight,
+  DH7_RndCamUp;
 
 /* Base render functions */
 

@@ -104,8 +104,16 @@ VOID DH7_RndInit( HWND hWnd )
 
   /* Set default render parameters */
   DH7_RndResize(100, 100);
-  DH7_RndCamSet(VecSet1(11), VecSet(0, 2, 0), VecSet(0, 1, 0));
-
+  DH7_RndCamLoc = VecSet1(11);
+  DH7_RndCamAt = VecSet(0, 2, 0);
+  DH7_RndCamUp = VecSet(0, 1, 0);
+  DH7_RndCamSet(DH7_RndCamLoc, DH7_RndCamAt, DH7_RndCamUp);
+  DH7_RndCamDir = VecSet(-DH7_RndMatrView.A[0][2],
+                         -DH7_RndMatrView.A[1][2],
+                         -DH7_RndMatrView.A[2][2]);
+  DH7_RndCamRight = VecSet(DH7_RndMatrView.A[0][0],
+                           DH7_RndMatrView.A[1][0],
+                           DH7_RndMatrView.A[2][0]);                                             
   DH7_RndResInit();
 }
 
@@ -172,4 +180,13 @@ VOID DH7_RndCamSet( VEC Loc, VEC At, VEC Up )
 {
   DH7_RndMatrView = MatrView(Loc, At, Up);
   DH7_RndMatrVP = MatrMulMatr(DH7_RndMatrView, DH7_RndMatrProj);
+  DH7_RndCamLoc = Loc;
+  DH7_RndCamAt = At;
+  DH7_RndCamUp = Up;
+  DH7_RndCamDir = VecSet(-DH7_RndMatrView.A[0][2],
+                         -DH7_RndMatrView.A[1][2],
+                         -DH7_RndMatrView.A[2][2]);
+  DH7_RndCamRight = VecSet(DH7_RndMatrView.A[0][0],
+                           DH7_RndMatrView.A[1][0],
+                           DH7_RndMatrView.A[2][0]);
 }

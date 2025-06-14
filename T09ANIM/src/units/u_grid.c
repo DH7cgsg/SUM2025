@@ -25,7 +25,7 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
     {
       dh7VERTEX *V = &G.V[i * G.W + j];
 
-      V->P = VecSet(j / (G.W - 1.0) * 50, 1.0, i / (G.H - 1.0) * 500);
+      V->P = VecSet(j / (G.W - 1.0) * 100 - 50, 0.0, i / (G.H - 1.0) * 100 - 50);
     }
 
   DH7_RndPrimFromGrid(&Uni->Land, &G);

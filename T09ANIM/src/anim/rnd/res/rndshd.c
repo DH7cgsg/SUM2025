@@ -1,4 +1,4 @@
-/* FILE NAME  : rndres.h
+/* FILE NAME  : rndshd.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 13.06.2025
  * PURPOSE    : 3D animation project.
