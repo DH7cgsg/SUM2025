@@ -16,20 +16,50 @@ typedef struct
 
 static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
 {
-  INT i, j;
   dh7GRID G;
+  HBITMAP hBm;
+  BITMAP bm;
+  dh7MATERIAL mtl = 
+  {
+    "land material",
+    {0.02, 0.02, 0.02},
+    {0.01, 0.01, 0.01},
+    {0.4, 0.4, 0.4},
+    10.0, 1,
+    {-1, -1, -1, -1, -1, -1, -1, -1},
+    0
+  };
 
-  DH7_RndGridCreate(&G, 300, 300);
-  for (i = 0; i < G.H; i++)
-    for (j = 0; j < G.W; j++)
+  if ((hBm = LoadImage(NULL, "bin/heights/hf.bmp", IMAGE_BITMAP, 0, 0,
+                       LR_LOADFROMFILE | LR_CREATEDIBSECTION)) != NULL)
+  {
+    INT w, h, x, y;
+
+    GetObject(hBm, sizeof(bm), &bm);
+    w = bm.bmWidth;
+    h = bm.bmHeight;
+    if (bm.bmBitsPixel == 8 && DH7_RndGridCreate(&G, w, h))
     {
-      dh7VERTEX *V = &G.V[i * G.W + j];
+      BYTE *Bits = bm.bmBits;
+ 
+      for (y = 0; y < h; y++)
+        for (x = 0; x < w; x++)
+        {
+          INT hgt = Bits[(h - 1 - y) * bm.bmWidthBytes + x];
+ 
+          G.V[y * w + x].P = VecMulNum(VecSet(x / (w - 1.0) - 0.5,
+                                    hgt / 255.0 / 5 - 0.009,
+                                    1 - y / (h - 1.0) - 0.5), 100);
+        }
 
-      V->P = VecSet(j / (G.W - 1.0) * 100 - 50, 0.0, i / (G.H - 1.0) * 100 - 50);
+      mtl.Tex[0] = DH7_RndTexAddFromFile("bin/textures/hfcolor.bmp");
+      Uni->Land.MtlNo = DH7_RndMaterialAdd(&mtl);
+      DH7_RndGridAutoNormals(&G);
+      DH7_RndPrimFromGrid(&Uni->Land, &G);
+      DH7_RndGridFree(&G);
     }
-
-  DH7_RndPrimFromGrid(&Uni->Land, &G);
-  DH7_RndGridFree(&G);
+    DeleteObject(hBm);
+  }
 }
 
 static VOID DH7_UnitClose( dh7UNIT_GRID *Uni, dh7ANIM *Ani )

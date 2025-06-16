@@ -33,6 +33,7 @@ VOID DH7_RndPrimFromGrid( dh7PRIM *Pr, dh7GRID *G )
   INT *Ind;
   INT i, k, j;
 
+  //DH7_RndGridAutoNormals(G);
   memset(Pr, 0, sizeof(dh7PRIM));
   if ((Ind = malloc(sizeof(INT) * ((G->H - 1) * (G->W * 2 + 1) - 1))) == NULL)
     return;
@@ -49,6 +50,7 @@ VOID DH7_RndPrimFromGrid( dh7PRIM *Pr, dh7GRID *G )
   }
   DH7_RndPrimCreate(Pr, DH7_RND_PRIM_TRISTRIP, G->V, G->W * G->H,
     Ind, (G->H - 1) * (G->W * 2 + 1) - 1);
+
   free(Ind);
 }
 
@@ -85,8 +87,10 @@ VOID DH7_RndGridAutoNormals( dh7GRID *G )
     }
 
    for (i = 0; i < G->W * G->H; i++)
+   {
      G->V[i].N = VecNormalize(G->V[i].N);
-
+     //G->V[i].C = Vec4SetVec3(VecSet(0, 0, 1));
+   }
 }
 
 

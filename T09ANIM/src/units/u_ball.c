@@ -17,10 +17,10 @@ typedef struct
 static VOID DH7_UnitInit( dh7UNIT_BALL *Uni, dh7ANIM *Ani )
 {
   DH7_RndPrimLoad(&Uni->Ball, "bin/models/btr.obj");
+  Uni->Ball.MtlNo = 1;
 }
 static VOID DH7_UnitResponse( dh7UNIT_BALL *Uni, dh7ANIM *Ani )
 {
-  Uni->Pos.Y += 0;
 }
 static VOID DH7_UnitRender( dh7UNIT_BALL *Uni, dh7ANIM *Ani )
 {

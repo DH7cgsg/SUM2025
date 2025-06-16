@@ -17,6 +17,7 @@
 /* Degrees to radians conversion */
 #define D2R(A) ((A) * (PI / 180.0))
 #define Degree2Radian(a) D2R(a)
+#define R2D(A) ((A) * (180.0 / PI))
  
 /* Base float point types */
 typedef double DBL;

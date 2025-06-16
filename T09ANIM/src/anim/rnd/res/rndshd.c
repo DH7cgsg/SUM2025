@@ -171,16 +171,7 @@ static VOID DH7_RndShdFree( INT Prg )
 dh7SHADER DH7_RndShaders[DH7_MAX_SHADERS];
 INT DH7_RndShadersSize;
 
-VOID DH7_RndResInit( VOID )
-{
-  DH7_RndShdInit();
 
-}
-
-VOID DH7_RndResClose( VOID )
-{
-  DH7_RndShdCLose();
-}
 
 
 VOID DH7_RndShdInit( VOID )
@@ -189,7 +180,7 @@ VOID DH7_RndShdInit( VOID )
   DH7_RndShdAdd("default");
 }
 
-VOID DH7_RndShdCLose( VOID )
+VOID DH7_RndShdClose( VOID )
 {
   INT i;
 

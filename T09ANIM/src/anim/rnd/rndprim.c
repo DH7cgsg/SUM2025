@@ -79,7 +79,7 @@ VOID DH7_RndPrimFree( dh7PRIM *Pr )
 VOID DH7_RndPrimTriMeshAutoNormals( dh7VERTEX *V, INT NumOfV, INT *Ind, INT NumOfI )
 {
   INT i;
-  VEC L = VecNormalize(VecSet(1, 3, 2));
+  //VEC L = VecNormalize(VecSet(1, 3, 2));
 
   for (i = 0; i < NumOfV; i++)
      V[i].N = VecSet1(0);
@@ -102,9 +102,10 @@ VOID DH7_RndPrimTriMeshAutoNormals( dh7VERTEX *V, INT NumOfV, INT *Ind, INT NumO
 
   for (i = 0; i < NumOfV; i++)
   {
-    FLT nl = VecDotVec(L, V[i].N);
+    //FLT nl = VecDotVec(L, V[i].N);
     
-    V[i].C = Vec4SetVec3(VecMulNum(VecSet(0, 0.5, 0), nl < 0.1 ? 0.1 : nl));
+    //V[i].C = Vec4SetVec3(VecMulNum(VecSet(0, 0.5, 0), nl < 0.1 ? 0.1 : nl));
+    V[i].C = Vec4SetVec3(VecSet(0, 0.5, 0));
   }
 }
 
@@ -121,21 +122,23 @@ VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
                      Pr->Type == DH7_RND_PRIM_TRIMESH ? GL_TRIANGLES :
                      Pr->Type == DH7_RND_PRIM_TRISTRIP ? GL_TRIANGLE_STRIP :
                      GL_POINTS;
+  
 
   //M = MatrMulMatr(Pr->Trans, MatrMulMatr(World, DH7_RndMatrVP)),
   //glLoadMatrixf(M.A[0]);
 
-  if (ProgId == 0)
+  if ((ProgId = DH7_RndMtlApply(Pr->MtlNo)) == 0)
     return;
   glUseProgram(ProgId);
   if ((loc = glGetUniformLocation(ProgId, "MatrWVP")) != -1)
     glUniformMatrix4fv(loc, 1, FALSE, M.A[0]);
-  if ((loc = glGetUniformLocation(ProgId, "Time")) != -1)
-    glUniform1f(loc, DH7_Anim.Time);
   if ((loc = glGetUniformLocation(ProgId, "MatrW")) != -1)
     glUniformMatrix4fv(loc, 1, FALSE, w.A[0]);
   if ((loc = glGetUniformLocation(ProgId, "MatrWinv")) != -1)
     glUniformMatrix4fv(loc, 1, FALSE, winv.A[0]);
+  if ((loc = glGetUniformLocation(ProgId, "CamLoc")) != -1) 
+    glUniform3fv(loc, 1, &DH7_RndCamLoc.X);
+
 
   glBindVertexArray(Pr->VA);
   if (Pr->IBuf == 0)
@@ -149,6 +152,7 @@ VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
     glDrawElements(gl_prim_type, Pr->NumOfElements, GL_UNSIGNED_INT, NULL);
     glBindVertexArray(0);
   }
+  
   glUseProgram(0);
 }
 BOOL DH7_RndPrimLoad( dh7PRIM *Pr, CHAR *FileName )

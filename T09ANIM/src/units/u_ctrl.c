@@ -28,6 +28,9 @@ static VOID DH7_UnitClose( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
 
 static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
 {
+  FLT Dist, cosT, sinT, cosP, sinP, plen, Azimuth, Elevator;
+  VEC NewLoc;
+
   if (Ani->KeysClick['P'])
     Ani->IsPause = !Ani->IsPause;
   
@@ -35,12 +38,34 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
   Uni->CamLoc =
     VecAddVec(Uni->CamLoc,
        VecMulNum(Uni->CamDir, Ani->GlobalDeltaTime * Ani->Mdz * 10));
-  Uni->CamLoc =
+  /* Uni->CamLoc =
     PointTransform(Uni->CamLoc,
       MatrRotateY(Ani->Keys[VK_LBUTTON] *
-                  Ani->DeltaTime * Ani->Mdx * -200));
+                  Ani->DeltaTime * Ani->Mdx * -200)); */
 
   DH7_RndCamSet(Uni->CamLoc, Uni->CamDir, VecSet(0, 1, 0));
+
+  Dist = VecLen(VecSubVec(DH7_RndCamAt, DH7_RndCamLoc));
+ 
+  cosT = (DH7_RndCamLoc.Y - DH7_RndCamAt.Y) / Dist;
+  sinT = sqrt(1 - cosT * cosT);
+ 
+  plen = Dist * sinT;
+  cosP = (DH7_RndCamLoc.Z - DH7_RndCamAt.Z) / plen;
+  sinP = (DH7_RndCamLoc.X - DH7_RndCamAt.X) / plen;
+ 
+  Azimuth = R2D(atan2(sinP, cosP));
+  Elevator = R2D(atan2(sinT, cosT));
+
+  Azimuth += Ani->GlobalDeltaTime * (-30 * Ani->Keys[VK_LBUTTON] * Ani->Mdx);
+  Elevator += Ani->GlobalDeltaTime * (-30 * Ani->Keys[VK_LBUTTON] * Ani->Mdy); 
+  
+  NewLoc = PointTransform(VecSet(0, Dist, 0),
+                        MatrMulMatr(MatrRotateX(Elevator),
+                                    MatrRotateY(Azimuth)));
+  DH7_RndCamSet(NewLoc, DH7_RndCamAt, DH7_RndCamUp);
+ 
+
 
   
 

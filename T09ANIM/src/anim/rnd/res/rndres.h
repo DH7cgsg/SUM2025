@@ -34,7 +34,7 @@ extern INT DH7_RndShadersSize;
 
 VOID DH7_RndShdInit( VOID );
 
-VOID DH7_RndShdCLose( VOID );
+VOID DH7_RndShdClose( VOID );
 
 INT DH7_RndShdAdd( CHAR *ShaderFileNamePrefix );
 
@@ -52,7 +52,7 @@ typedef struct tagdh7TEXTURE
 extern dh7TEXTURE DH7_RndTextures[DH7_MAX_TEXTURES];
 extern INT DH7_RndTexturesSize;
 
-INT DH7_RndTexAddImg( CHAR *Name, INT W, INT H, INT C, VOID *Bits );
+INT DH7_RndTexAddImg( CHAR *Name, INT W, INT H, VOID *Bits );
 
 INT DH7_RndTexAddFromFile( CHAR *FileName );
 
@@ -87,7 +87,7 @@ dh7MATERIAL DH7_RndMtlGetDef( VOID );
 
 INT DH7_RndMaterialAdd( dh7MATERIAL *Mtl ); 
 
-UINT DH7_RndMaterialApply( INT MtlNo );
+UINT DH7_RndMtlApply( INT MtlNo );
 
 VOID DH7_RndMtlInit( VOID );
 
