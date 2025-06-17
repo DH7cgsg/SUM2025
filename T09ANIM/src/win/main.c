@@ -71,6 +71,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   //DH7_AnimAddUnit(DH7_UnitCreateBall());
   DH7_AnimAddUnit(DH7_UnitCreateCTRL());
   DH7_AnimAddUnit(DH7_UnitCreateGRID());
+  DH7_AnimAddUnit(DH7_UnitCreateModel());
 
    /* Message loop */
   while (TRUE)

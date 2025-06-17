@@ -44,6 +44,14 @@ typedef struct tagdh7PRIM
   INT MtlNo; /* Material num */
 } dh7PRIM;
 
+typedef struct tagdh7PRIMS
+{
+  INT NumOfPrims; /* Number of primitives in array */  
+  dh7PRIM *Prims; /* Array of primitives */
+  MATR mTrans;     /* Common transformation matrix */
+  VEC MinBB, MaxBB;
+} dh7PRIMS;
+
 typedef struct tagdh7GRID
 {
   INT W, H;      /* Grid size (in vertices) */
@@ -100,13 +108,19 @@ VOID APIENTRY glDebugOutput( UINT Source, UINT Type, UINT Id, UINT Severity,
                              INT Length, const CHAR *Message,
                              const VOID *UserParam );
 
+/* multiple prims handle functions */
 
+BOOL DH7_RndPrimsCreate( dh7PRIMS *Prs, INT NumOfPrims );
+VOID DH7_RndPrimsFree( dh7PRIMS *Prs );
+VOID DH7_RndPrimsDraw( dh7PRIMS *Prs, MATR World );
+BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName );
+
+
+
+/* Grid handle functions */
 BOOL DH7_RndGridCreate( dh7GRID *G, INT W, INT H );
-
 VOID DH7_RndGridFree( dh7GRID *G );
-
 VOID DH7_RndPrimFromGrid( dh7PRIM *Pr, dh7GRID *G );
-
 VOID DH7_RndGridAutoNormals( dh7GRID *G );
 
 

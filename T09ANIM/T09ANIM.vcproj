@@ -248,6 +248,10 @@
 						RelativePath=".\src\anim\rnd\rndprim.c"
 						>
 					</File>
+					<File
+						RelativePath=".\src\anim\rnd\rndprims.c"
+						>
+					</File>
 					<Filter
 						Name="OpenGL"
 						>
@@ -295,6 +299,10 @@
 				</File>
 				<File
 					RelativePath=".\src\units\u_grid.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_model.c"
 					>
 				</File>
 				<File

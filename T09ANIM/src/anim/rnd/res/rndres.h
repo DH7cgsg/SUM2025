@@ -52,7 +52,7 @@ typedef struct tagdh7TEXTURE
 extern dh7TEXTURE DH7_RndTextures[DH7_MAX_TEXTURES];
 extern INT DH7_RndTexturesSize;
 
-INT DH7_RndTexAddImg( CHAR *Name, INT W, INT H, VOID *Bits );
+INT DH7_RndTexAddImg( CHAR *Name, INT W, INT H, INT C, VOID *Bits );
 
 INT DH7_RndTexAddFromFile( CHAR *FileName );
 
@@ -85,7 +85,7 @@ extern INT DH7_RndMaterialsSize;
 
 dh7MATERIAL DH7_RndMtlGetDef( VOID );
 
-INT DH7_RndMaterialAdd( dh7MATERIAL *Mtl ); 
+INT DH7_RndMtlAdd( dh7MATERIAL *Mtl ); 
 
 UINT DH7_RndMtlApply( INT MtlNo );
 

@@ -33,8 +33,8 @@ VOID DH7_RndPrimFromGrid( dh7PRIM *Pr, dh7GRID *G )
   INT *Ind;
   INT i, k, j;
 
-  //DH7_RndGridAutoNormals(G);
-  memset(Pr, 0, sizeof(dh7PRIM));
+  
+  //memset(Pr, 0, sizeof(dh7PRIM));
   if ((Ind = malloc(sizeof(INT) * ((G->H - 1) * (G->W * 2 + 1) - 1))) == NULL)
     return;
 

@@ -16,7 +16,7 @@ VOID DH7_RndPrimCreate( dh7PRIM *Pr, dh7PRIM_TYPE Type, dh7VERTEX *V, INT NoofV,
 { 
   INT i;
 
-  memset(Pr, 0, sizeof(dh7PRIM));
+  //memset(Pr, 0, sizeof(dh7PRIM));
 
   glGenVertexArrays(1, &Pr->VA);
   if (V != NULL && NoofV != 0)
@@ -113,7 +113,7 @@ VOID DH7_RndPrimTriMeshAutoNormals( dh7VERTEX *V, INT NumOfV, INT *Ind, INT NumO
 VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
 {
   INT loc;
-  UINT ProgId = DH7_RndShaders[0].ProgId;
+  UINT ProgId;
   MATR 
     w = MatrMulMatr(Pr->Trans, World),
     winv = MatrTranspose(MatrInverse(w)),

@@ -19,7 +19,8 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
   dh7GRID G;
   HBITMAP hBm;
   BITMAP bm;
-  dh7MATERIAL mtl = 
+  dh7MATERIAL mtl = DH7_RndMtlGetDef();
+  /*dh7MATERIAL mtl = 
   {
     "land material",
     {0.02, 0.02, 0.02},
@@ -28,7 +29,7 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
     10.0, 1,
     {-1, -1, -1, -1, -1, -1, -1, -1},
     0
-  };
+  }; */
 
   if ((hBm = LoadImage(NULL, "bin/heights/hf.bmp", IMAGE_BITMAP, 0, 0,
                        LR_LOADFROMFILE | LR_CREATEDIBSECTION)) != NULL)
@@ -46,14 +47,17 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
         for (x = 0; x < w; x++)
         {
           INT hgt = Bits[(h - 1 - y) * bm.bmWidthBytes + x];
- 
-          G.V[y * w + x].P = VecMulNum(VecSet(x / (w - 1.0) - 0.5,
-                                    hgt / 255.0 / 5 - 0.009,
+          VEC v = VecMulNum(VecSet(x / (w - 1.0) - 0.5,
+                                    hgt / 255.0 / 10,
                                     1 - y / (h - 1.0) - 0.5), 100);
+ 
+          G.V[y * w + x].P = v;
+          G.V[y * w + x].T = Vec2Set(5 * x / (w - 1.0), 5 * (1 - y / (h - 1.0)));
+          
         }
 
-      mtl.Tex[0] = DH7_RndTexAddFromFile("bin/textures/hfcolor.bmp");
-      Uni->Land.MtlNo = DH7_RndMaterialAdd(&mtl);
+      mtl.Tex[0] = DH7_RndTexAddFromFile("bin/textures/chess.bmp");
+      Uni->Land.MtlNo = DH7_RndMtlAdd(&mtl);
       DH7_RndGridAutoNormals(&G);
       DH7_RndPrimFromGrid(&Uni->Land, &G);
       DH7_RndGridFree(&G);

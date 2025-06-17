@@ -19,7 +19,7 @@ INT DH7_RndFrameW, DH7_RndFrameH; /* Work window size */
 DBL
   DH7_RndProjSize = 0.1,     /* Project plane fit square */
   DH7_RndProjDist = 0.1,     /* Distance to project plane from viewer (near) */
-  DH7_RndProjFarClip = 300;  /* Distance to project far clip plane (far) */
+  DH7_RndProjFarClip = 5000;  /* Distance to project far clip plane (far) */
  
 MATR
   DH7_RndMatrView, /* View coordinate system matrix */

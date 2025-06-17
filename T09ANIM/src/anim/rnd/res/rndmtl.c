@@ -32,7 +32,7 @@ dh7MATERIAL DH7_RndMtlGetDef( VOID )
   return def_mtl;
 }
 
-INT DH7_RndMaterialAdd( dh7MATERIAL *Mtl )
+INT DH7_RndMtlAdd( dh7MATERIAL *Mtl )
 {
   if (DH7_RndMaterialsSize >= DH7_MAX_MATERIALS)
     return 0;
@@ -111,8 +111,8 @@ VOID DH7_RndMtlInit( VOID )
   };
 
   DH7_RndMaterialsSize = 0;
-  DH7_RndMaterialAdd(&def);
-  DH7_RndMaterialAdd(&gold_mtl);
+  DH7_RndMtlAdd(&def);
+  DH7_RndMtlAdd(&gold_mtl);
 }
 
 VOID DH7_RndMtlClose( VOID )
@@ -121,7 +121,7 @@ VOID DH7_RndMtlClose( VOID )
 
   DH7_RndMaterialsSize = 0;
 
-  DH7_RndMaterialAdd(&def);
+  DH7_RndMtlAdd(&def);
 }
 
 dh7MATERIAL * DH7_RndMtlGet( INT MtlNo )
@@ -129,7 +129,6 @@ dh7MATERIAL * DH7_RndMtlGet( INT MtlNo )
   if (MtlNo < 0 || MtlNo >= DH7_RndMaterialsSize)
     MtlNo = 0;
   return &DH7_RndMaterials[MtlNo];
-
 }
 
 

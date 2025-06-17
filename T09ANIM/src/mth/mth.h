@@ -309,6 +309,11 @@ __inline MATR MatrMulMatr( MATR M1, MATR M2 )
   return r;
 }
 
+__inline MATR MatrMulMatr3( MATR M1, MATR M2, MATR M3 )
+{
+  return MatrMulMatr(MatrMulMatr(M1, M2), M3);
+}
+
 __inline MATR MatrTranspose( MATR M )
 {
   MATR r;

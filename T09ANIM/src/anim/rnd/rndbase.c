@@ -100,6 +100,8 @@ VOID DH7_RndInit( HWND hWnd )
   wglSwapIntervalEXT(0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_PRIMITIVE_RESTART);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glPrimitiveRestartIndex(-1);
 
   /* Set default render parameters */
