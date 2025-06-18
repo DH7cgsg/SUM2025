@@ -95,6 +95,20 @@ VOID DH7_RndMtlClose( VOID );
 
 dh7MATERIAL * DH7_RndMtlGet( INT MtlNo );
 
+/* Fonts handle functions */
+typedef struct tagdh7FONT
+{
+  DWORD LineH, BaseH; /* Font line height and base line height in pixels */
+  FLT AdvanceX[256];  /* Every letter shift right value (0 if no letter present) */
+} dh7FONT;
+
+BOOL DH7_RndFntLoad( CHAR *FileName );
+VOID DH7_RndFntInit( VOID );
+VOID DH7_RndFntClose( VOID );
+VOID DH7_RndFntDraw( CHAR *Str, VEC Pos, FLT Size );
+
+
+
 
 
 

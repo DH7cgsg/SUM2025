@@ -12,9 +12,11 @@ VOID DH7_RndResInit( VOID )
   DH7_RndShdInit();
   DH7_RndTexInit();
   DH7_RndMtlInit();
+  DH7_RndFntInit();
 }
 VOID DH7_RndResClose( VOID )
 {
+  DH7_RndFntClose();
   DH7_RndMtlClose();
   DH7_RndTexClose();
   DH7_RndShdClose();

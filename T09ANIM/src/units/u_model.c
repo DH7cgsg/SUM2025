@@ -42,13 +42,13 @@ static VOID DH7_UnitResponse( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 }
 static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
-  /*VEC d;
+  MATR m;
 
-  d = VecNeg(VecDivNum(VecSubVec(Uni->Prs.MinBB, Uni->Prs.MaxBB), 2.0));
-  d = VecAddVec(d, Uni->Prs.MinBB); 
-  DH7_RndPrimsDraw(&Uni->Prs, MatrMulMatr(MatrScale(VecSet1(0.1)), MatrTranslate(VecNeg(d))));
-  */
-  DH7_RndPrimsDraw(&Uni->Prs, MatrMulMatr(MatrScale(VecSet1(0.2)), MatrTranslate(Uni->Pos)));  
+  m = MatrIdentity();
+  m = MatrMulMatr(m, MatrScale(VecSet1(0.2)));
+  m = MatrMulMatr(m, MatrTranslate(Uni->Pos));
+
+  DH7_RndPrimsDraw(&Uni->Prs, m);  
 
 }
 static VOID DH7_UnitClose( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )

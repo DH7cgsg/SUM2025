@@ -37,7 +37,7 @@ VOID DH7_RndPrimsDraw( dh7PRIMS *Prs, MATR World )
   INT i;
   MATR m = MatrMulMatr(Prs->mTrans, World);
 
-  /* Draw all nonmTransparent primitives */ 
+  /* Draw all nonTransparent primitives */ 
   for (i = 0; i < Prs->NumOfPrims; i++)
     if (DH7_RndMtlGet(Prs->Prims[i].MtlNo)->Trans == 1)
       DH7_RndPrimDraw(&Prs->Prims[i], m);
