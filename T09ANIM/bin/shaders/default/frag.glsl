@@ -14,6 +14,8 @@ uniform float GlobalTime;
 uniform vec3 Ka, Kd, Ks;
 uniform float Ph;
 uniform vec3 CamLoc;
+
+uniform int AddonI0, AddonI1;
                                     
 vec3 Shade( vec3 P, vec3 N )
 {
@@ -42,6 +44,8 @@ vec3 Shade( vec3 P, vec3 N )
 
  
 void main( void )
-{                              
+{     
+  if (AddonI0 > 20)
+     discard;                         
   OutColor = vec4(Shade(DrawPos, normalize(DrawNormal)), 1); 
 }

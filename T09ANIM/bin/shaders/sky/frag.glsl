@@ -3,7 +3,7 @@
 out vec4 OutColor;
  
 in vec4 DrawColor;
-in vec3 DrawNormal;
+in vec3 Normal;
 in vec3 DrawPos;
 in vec2 DrawTexCoord;
 
@@ -13,35 +13,32 @@ uniform float Time;
 uniform float GlobalTime;
 uniform vec3 Ka, Kd, Ks;
 uniform float Ph;
-uniform vec3 CamLoc;
-                                    
-vec3 Shade( vec3 P, vec3 N )
-{
-  vec3 LPos = vec3(0, 100, 100); 
-  vec3 L = normalize(LPos - P);
-  vec3 LC = vec3(1, 1, 1);
-  
-  vec3 V = normalize(P - CamLoc);
-  N = faceforward(N, V, N);
-  vec3 color = vec3(0);
-  color += Ka; //ambient
-  vec3 R = reflect(V, N);
-  vec3 diff = Kd;
-  if (IsTexture0)
-  {
-    vec4 tex_color = texture(Tex, DrawTexCoord);
-    diff = tex_color.rgb;
-  }
-  color += LC * diff * max(0, dot(N, L)); //diffuse
-  color += LC * Ks * pow(max(0, dot(R, L)), Ph); //specular
- 
-  return color;
-
-  
-}
-
- 
+uniform vec3 CamLoc, CamDir, CamRight, CamUp;
+uniform float FrameW, FrameH, ProjDist, ProjSize;
+                              
 void main( void )
-{                              
-  OutColor = vec4(Shade(DrawPos, normalize(DrawNormal)), 1); 
+{  
+  float Wp, Hp;
+  
+  Wp = Hp = ProjSize;
+  /* Correct aspect ratio */
+  if (FrameW > FrameH)
+    Wp *= FrameW / FrameH;
+  else
+    Hp *= FrameH / FrameW;
+  float
+    xp = gl_FragCoord.x * Wp / FrameW,
+    yp = gl_FragCoord.y * Hp / FrameH;
+ 
+  vec3 D = normalize(CamDir * ProjDist + CamRight * xp + CamUp * yp);
+  float
+    theta = acos(-D.y) / acos(-1),
+    phi = atan(D.x, D.z) / (2 * acos(-1));
+
+          
+
+
+  vec4 tex_color = texture(Tex, vec2(phi, theta));                            
+  OutColor = vec4(tex_color.rgb,  1); 
 }
+  

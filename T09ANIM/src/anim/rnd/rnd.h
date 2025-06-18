@@ -82,6 +82,10 @@ extern VEC
   DH7_RndCamRight,
   DH7_RndCamUp;
 
+/* shader addons data */
+extern INT DH7_RndShdAddonI[5];
+extern FLT DH7_RndShdAddonF[5];
+
 /* Base render functions */
 
 VOID DH7_RndInit( HWND hWnd );

@@ -19,8 +19,8 @@ static VOID DH7_UnitInit( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
   INT i;
 
-  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/T-50.g3dm");
-  Uni->Pos = VecSet(0, 2, 20);
+  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/T-50.g3DM");
+  Uni->Pos = VecSet(0, 10, 0);
   Uni->AngleY = 0;
   for (i = 0; i < Uni->Prs.NumOfPrims; i++)
   {
@@ -61,7 +61,7 @@ static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
   DH7_RndPrimsDraw(&Uni->Prs, m); */
 
   p = MatrIdentity();
-  p = MatrMulMatr(p, MatrScale(VecSet1(0.5)));
+  p = MatrMulMatr(p, MatrScale(VecSet1(2)));
   p = MatrMulMatr(p, MatrRotateY(100 * Uni->AngleRot));
   p = MatrMulMatr(p, MatrTranslate(Uni->Pos));
   

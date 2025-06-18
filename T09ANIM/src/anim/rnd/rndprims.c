@@ -35,26 +35,28 @@ VOID DH7_RndPrimsFree( dh7PRIMS *Prs )
 VOID DH7_RndPrimsDraw( dh7PRIMS *Prs, MATR World )
 {
   INT i;
-
   MATR m = MatrMulMatr(Prs->mTrans, World);
+
+  DH7_RndShdAddonI[1] = Prs->NumOfPrims;
+
 
   /* Draw all nonTransparent primitives */ 
   for (i = 0; i < Prs->NumOfPrims; i++)
     if (DH7_RndMtlGet(Prs->Prims[i].MtlNo)->Trans == 1)
-      DH7_RndPrimDraw(&Prs->Prims[i], m);
+      DH7_RndShdAddonI[0] = i, DH7_RndPrimDraw(&Prs->Prims[i], m);
 
    /* Draw all transparent primitives with front face culling */ 
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
   for (i = 0; i < Prs->NumOfPrims; i++)
     if (DH7_RndMtlGet(Prs->Prims[i].MtlNo)->Trans != 1)
-      DH7_RndPrimDraw(&Prs->Prims[i], m);
+      DH7_RndShdAddonI[0] = i, DH7_RndPrimDraw(&Prs->Prims[i], m);
 
    /* Draw all transparent primitives with back face culling */ 
   glCullFace(GL_BACK);
   for (i = 0; i < Prs->NumOfPrims; i++)
     if (DH7_RndMtlGet(Prs->Prims[i].MtlNo)->Trans != 1)
-      DH7_RndPrimDraw(&Prs->Prims[i], m);
+      DH7_RndShdAddonI[0] = i, DH7_RndPrimDraw(&Prs->Prims[i], m);
 
   glDisable(GL_CULL_FACE);
 
@@ -89,6 +91,7 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
     return FALSE;
   /* Measure file length */
   fseek(F, 0, SEEK_END);
+
   flen = ftell(F);
    /* Allocate memory */
   if ((mem = malloc(flen)) == NULL)
@@ -186,4 +189,5 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
   }
   free(mem);
   return TRUE;
+
 }    /* End of 'DH7_RndPrimsDraw' function */

@@ -112,7 +112,7 @@ VOID DH7_RndPrimTriMeshAutoNormals( dh7VERTEX *V, INT NumOfV, INT *Ind, INT NumO
 
 VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
 {
-  INT loc;
+  INT loc, i;
   UINT ProgId;
   MATR 
     w = MatrMulMatr(Pr->Trans, World),
@@ -138,6 +138,23 @@ VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
     glUniformMatrix4fv(loc, 1, FALSE, winv.A[0]);
   if ((loc = glGetUniformLocation(ProgId, "CamLoc")) != -1) 
     glUniform3fv(loc, 1, &DH7_RndCamLoc.X);
+  if ((loc = glGetUniformLocation(ProgId, "ProjSize")) != -1) 
+    glUniform1f(loc, DH7_RndProjSize);  
+  if ((loc = glGetUniformLocation(ProgId, "ProjDist")) != -1) 
+    glUniform1f(loc, DH7_RndProjDist);  
+  if ((loc = glGetUniformLocation(ProgId, "FrameW")) != -1) 
+    glUniform1f(loc, DH7_RndFrameW);  
+  if ((loc = glGetUniformLocation(ProgId, "FrameH")) != -1) 
+    glUniform1f(loc, DH7_RndFrameH);
+
+  for (i = 0; i < 5; i++)
+  {
+    CHAR Name[] = "AddonI0";
+
+    Name[6] = '0' + i;
+    if ((loc = glGetUniformLocation(ProgId, Name)) != -1) 
+      glUniform1f(loc, DH7_RndShdAddonI[i]);
+  }
 
 
   glBindVertexArray(Pr->VA);

@@ -33,4 +33,7 @@ VEC
   DH7_RndCamRight,
   DH7_RndCamUp;
 
+INT DH7_RndShdAddonI[5];
+FLT DH7_RndShdAddonF[5];
+
 

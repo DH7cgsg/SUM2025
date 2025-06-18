@@ -75,6 +75,8 @@ static INT DH7_RndShdLoad( CHAR *FileNamePrefix )
     txt = DH7_RndShdLoadTextFromFile(Buf);
     if (txt == NULL)
     {
+      if (i >= 2)
+        continue;
       DH7_RndShdLog(FileNamePrefix, shds[i].Name, "Error load file");
       is_ok = FALSE;
       break;
