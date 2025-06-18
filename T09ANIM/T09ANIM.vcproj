@@ -310,6 +310,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_sky.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\units.h"
 					>
 				</File>

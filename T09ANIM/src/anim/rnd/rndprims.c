@@ -35,6 +35,7 @@ VOID DH7_RndPrimsFree( dh7PRIMS *Prs )
 VOID DH7_RndPrimsDraw( dh7PRIMS *Prs, MATR World )
 {
   INT i;
+
   MATR m = MatrMulMatr(Prs->mTrans, World);
 
   /* Draw all nonTransparent primitives */ 

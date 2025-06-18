@@ -11,15 +11,17 @@ typedef struct
 {
   DH7_UNIT_BASE_FIELDS;
   dh7PRIMS Prs;
-  VEC Pos;
+  VEC Pos, Dir, OldPos;
+  FLT AngleRot, AngleY;
 } dh7UNIT_MODEL;
 
 static VOID DH7_UnitInit( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
   INT i;
 
-  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/kirby.g3dm");
+  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/T-50.g3dm");
   Uni->Pos = VecSet(0, 2, 20);
+  Uni->AngleY = 0;
   for (i = 0; i < Uni->Prs.NumOfPrims; i++)
   {
     Uni->Prs.MinBB = VecMinVec(Uni->Prs.Prims[i].MinBB, Uni->Prs.MinBB);
@@ -29,26 +31,46 @@ static VOID DH7_UnitInit( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 }
 static VOID DH7_UnitResponse( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
-  INT i;
-  VEC axe;
+  /*INT i;
 
+  Uni->OldPos = Uni->Pos;
   Uni->Pos = PointTransform(Uni->Pos, MatrTranslate(VecSet((Ani->JX + 0.007828) * 30 * Ani->GlobalDeltaTime, 0, 0)));
   Uni->Pos = PointTransform(Uni->Pos, MatrTranslate(VecSet(0, 0, (Ani->JY + 0.007828) * 30 * Ani->GlobalDeltaTime)));
-  //printf("%lf\n", Ani->JZ);
+  Uni->Dir = VecSubVec(Uni->Pos, Uni->OldPos);
+  Uni->AngleY = VecDotVec(VecNormalize(Uni->Dir), VecSet(1, 0, 0));
+  if (Uni->AngleY != 0)
+    Uni->AngleRot = Uni->AngleY;
+  printf("Dir: %lf  %lf  %lf\n", Uni->Dir.X, Uni->Dir.Y, Uni->Dir.Z);
+  printf("Angle: %lf\n", Uni->AngleY);
+  printf("AngleRot: %lf\n", Uni->AngleRot);
+  printf("%lf\n", Ani->JZ);
 
-  //for (i = 0; i < Uni->Prs.NumOfPrims; i++)
-    //Uni->Prs.Prims[i].Trans = MatrRotate(Ani->JZ * 100000 * Ani->GlobalDeltaTime, axe);
+  for (i = 0; i < Uni->Prs.NumOfPrims; i++)
+    Uni->Prs.Prims[i].Trans = MatrRotate(Ani->JZ * 100000 * Ani->GlobalDeltaTime, axe); */
 
 }
 static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
-  MATR m;
+  MATR p;
 
-  m = MatrIdentity();
-  m = MatrMulMatr(m, MatrScale(VecSet1(0.2)));
+  p = MatrIdentity();
+  /*m = MatrMulMatr(m, MatrScale(VecSet1(0.2)));
+  m = MatrMulMatr(m, MatrRotateY(Ani->Keys['C'] * Ani-> * 100));
   m = MatrMulMatr(m, MatrTranslate(Uni->Pos));
 
-  DH7_RndPrimsDraw(&Uni->Prs, m);  
+  DH7_RndPrimsDraw(&Uni->Prs, m); */
+
+  p = MatrIdentity();
+  p = MatrMulMatr(p, MatrScale(VecSet1(0.5)));
+  p = MatrMulMatr(p, MatrRotateY(100 * Uni->AngleRot));
+  p = MatrMulMatr(p, MatrTranslate(Uni->Pos));
+  
+  DH7_RndPrimsDraw(&Uni->Prs, p);
+
+
+
+
+
 
 }
 static VOID DH7_UnitClose( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )

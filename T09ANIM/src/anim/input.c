@@ -9,13 +9,13 @@
 
 #define DH7_GET_JOYSTIC_AXIS(A) \
   (2.0 * (ji.dw ## A ## pos - jc.w ## A ## min) / (jc.w ## A ## max - jc.w ## A ## min) - 1)
-
+                                               
 
 INT DH7_MouseWheel;
 
 static VOID DH7_AnimKeyboardInit( VOID )
 {
-
+  
 }
 static VOID DH7_AnimKeyboardResponse( VOID )
 {
@@ -74,6 +74,7 @@ static VOID DH7_AnimJoystickResponse( VOID )
  
       ji.dwSize = sizeof(JOYINFOEX);
       ji.dwFlags = JOY_RETURNALL;
+     
       if (joyGetPosEx(JOYSTICKID1, &ji) == JOYERR_NOERROR)
       {
         /* Buttons */
@@ -84,7 +85,7 @@ static VOID DH7_AnimJoystickResponse( VOID )
           DH7_Anim.JButOld[i] = DH7_Anim.JBut[i];
         }
         /* Axes */
-        DH7_Anim.JX = DH7_GET_JOYSTIC_AXIS(X);
+        DH7_Anim.JX = DH7_GET_JOYSTIC_AXIS(X);  
         DH7_Anim.JY = DH7_GET_JOYSTIC_AXIS(Y);
         DH7_Anim.JZ = DH7_GET_JOYSTIC_AXIS(Z);
         DH7_Anim.JR = DH7_GET_JOYSTIC_AXIS(R);

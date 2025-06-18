@@ -58,6 +58,7 @@ static INT DH7_RndShdLoad( CHAR *FileNamePrefix )
   {
     {"vert", GL_VERTEX_SHADER},
     {"frag", GL_FRAGMENT_SHADER},
+    {"geom", GL_GEOMETRY_SHADER}
   };
   INT i, res, NoofS = sizeof(shds) / sizeof(shds[0]);
   UINT prg = 0;
