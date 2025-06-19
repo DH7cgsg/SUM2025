@@ -11,7 +11,7 @@ typedef struct
 {
   DH7_UNIT_BASE_FIELDS;
   dh7PRIMS Prs;
-  VEC Pos, V, OldV;
+  VEC Pos, Vx, Vy, g;
   FLT AngleRot, AngleY;
 } dh7UNIT_MODEL;
 
@@ -19,9 +19,12 @@ static VOID DH7_UnitInit( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
   INT i;
 
-  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/kirby.g3dm");
-  Uni->Pos = VecSet(48, 14, 90);
-  Uni->V = VecSet(0, 0, 0);
+  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/konteynrer.g3dm");
+  Uni->Pos = VecSet(480, 85, 60);
+  //Uni->Pos = VecSet1(0);
+  Uni->Vx = VecSet(0, 0, 0);
+  Uni->Vy = VecSet(0, 0, 0);
+  Uni->g =  VecSet(0, 10, 0);
   for (i = 0; i < Uni->Prs.NumOfPrims; i++)
   {
     Uni->Prs.MinBB = VecMinVec(Uni->Prs.Prims[i].MinBB, Uni->Prs.MinBB);
@@ -31,17 +34,19 @@ static VOID DH7_UnitInit( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 }
 static VOID DH7_UnitResponse( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
+  static CHAR buf[1000];
 
   if (Ani->Keys['A'])
-    Uni->V = VecAddVec(VecSet(10, 0, 0), Uni->V);
+    Uni->Vx = VecAddVec(VecSet(500, 0, 0), Uni->Vx);
   if (Ani->Keys['D'])
-    Uni->V = VecAddVec(VecSet(-10, 0, 0), Uni->V);
+    Uni->Vx = VecAddVec(VecSet(-500, 0, 0), Uni->Vx);
   if (Ani->Keys['W'])
-    Uni->V = VecAddVec(VecSet(0, 0, 10), Uni->V);
+    Uni->Vx = VecAddVec(VecSet(0, 0, 500), Uni->Vx);
   if (Ani->Keys['S'])
-    Uni->V = VecAddVec(VecSet(0, 0, -10), Uni->V);
+    Uni->Vx = VecAddVec(VecSet(0, 0, -500), Uni->Vx);
 
-  Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->V, Ani->GlobalDeltaTime));
+  Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->Vx, Ani->GlobalDeltaTime));
+  Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->Vy, Ani->GlobalDeltaTime));
 
   if (Ani->KeysClick['V'])
     DH7_RndCamMode = !DH7_RndCamMode;
@@ -49,11 +54,20 @@ static VOID DH7_UnitResponse( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
   if (DH7_RndCamMode)
   {
   }
-  Uni->V = VecSet(0, 0, 0);
+  //printf("%lf\n", DH7_Anim.MapHeights[(INT)Uni->Pos.Z][(INT)Uni->Pos.X]);
+  //printf("Pos: %lf %lf %lf", Uni->Pos.X, Uni->Pos.Y, Uni->Pos.Z);
+  
+  /*if (Uni->Pos.Y != 13)
+    Uni->Vy = VecSubVec(Uni->Vy, VecMulNum(Uni->g, Ani->GlobalDeltaTime));
+  else
+    Uni->Vy = VecSet1(0); */
+  
+  Uni->Vx = VecSet(0, 0, 0);
 }
 static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
   MATR p;
+  static CHAR buf[1000];
 
   p = MatrIdentity();
   /*m = MatrMulMatr(m, MatrScale(VecSet1(0.2)));
@@ -62,10 +76,16 @@ static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 
   DH7_RndPrimsDraw(&Uni->Prs, m); */
 
-  p = MatrMulMatr(p, MatrScale(VecSet1(0.2)));
+  p = MatrMulMatr(p, MatrScale(VecSet1(10)));
   p = MatrMulMatr(p, MatrTranslate(Uni->Pos));
   
-  
+  sprintf(buf,"Player Pos:  %lf, %lf, %lf", Uni->Pos.X, Uni->Pos.Y, Uni->Pos.Z);
+  DH7_RndFntDraw(buf, VecSet(0, -200, 0), 30);
+
+  memset(buf, 0, sizeof(buf));
+  sprintf(buf,"hgt:  %i", DH7_Anim.MapHeights[(INT)Uni->Pos.Z][(INT)Uni->Pos.X]);
+  DH7_RndFntDraw(buf, VecSet(0, -400, 0), 30);
+
   DH7_RndPrimsDraw(&Uni->Prs, p);
 
 

@@ -19,7 +19,7 @@ uniform int AddonI0, AddonI1;
                                     
 vec3 Shade( vec3 P, vec3 N )
 {
-  vec3 LPos = vec3(0, 100, 100); 
+  vec3 LPos = vec3(100, 500, 100); 
   vec3 L = normalize(LPos - P);
   vec3 LC = vec3(1, 1, 1);
   

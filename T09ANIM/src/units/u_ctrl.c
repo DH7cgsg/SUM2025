@@ -60,15 +60,15 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
   Elevator = R2D(atan2(sinT, cosT));
 
   Azimuth += Ani->GlobalDeltaTime *
-    (-30 * Ani->Keys[VK_LBUTTON] * Ani->Mdx);
+    (-300 * Ani->Keys[VK_LBUTTON] * Ani->Mdx);
      
 
   Elevator += Ani->GlobalDeltaTime *
-    (-10 * Ani->Keys[VK_LBUTTON] * Ani->Mdy +
+    (-100 * Ani->Keys[VK_LBUTTON] * Ani->Mdy +
      40 * 1 * (Ani->Keys[VK_UP] - Ani->Keys[VK_DOWN]));
 
   Dist += Ani->GlobalDeltaTime *
-    (-1 * 30 * Ani->Mdz +
+    (-1 * 300 * Ani->Mdz +
      8 * (1 + Ani->Keys[VK_SHIFT] * 30) *
         (Ani->Keys[VK_NEXT] - Ani->Keys[VK_PRIOR]));
      
@@ -77,7 +77,7 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
   if (Elevator > 178)
       Elevator = 178;
   if (Dist < 0.1)
-      Dist = 0.1;
+      Dist = 0.1; 
 
   Wp = DH7_RndProjSize;
   Hp = DH7_RndProjSize;

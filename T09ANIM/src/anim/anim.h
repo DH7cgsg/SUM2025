@@ -57,6 +57,9 @@ struct tagdh7ANIM
   INT JPov;                               /* Joystick point-of-view control [-1,0..7] */
   DBL
     JX, JY, JZ, JR;                       /* Joystick axes */
+
+  INT MapHeights[1152][1152]; //w, h
+
 };
 
 extern dh7ANIM DH7_Anim;
