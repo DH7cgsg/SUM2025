@@ -6,6 +6,10 @@
  */
 
 #include "units/units.h"
+/* NVidia OpenGL extension defines */
+#define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
+#define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
+ 
 
 
 typedef struct
@@ -56,16 +60,16 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
   Elevator = R2D(atan2(sinT, cosT));
 
   Azimuth += Ani->GlobalDeltaTime *
-    (-30 * 30 * Ani->Keys[VK_LBUTTON] * Ani->Mdx);
+    (-30 * Ani->Keys[VK_LBUTTON] * Ani->Mdx);
      
 
   Elevator += Ani->GlobalDeltaTime *
-    (-10 * 30 * Ani->Keys[VK_LBUTTON] * Ani->Mdy +
+    (-10 * Ani->Keys[VK_LBUTTON] * Ani->Mdy +
      40 * 1 * (Ani->Keys[VK_UP] - Ani->Keys[VK_DOWN]));
 
   Dist += Ani->GlobalDeltaTime *
-    (-10 * Ani->Mdz +
-     80 * 0.1 * (1 + Ani->Keys[VK_SHIFT] * 30) *
+    (-1 * 30 * Ani->Mdz +
+     8 * (1 + Ani->Keys[VK_SHIFT] * 30) *
         (Ani->Keys[VK_NEXT] - Ani->Keys[VK_PRIOR]));
      
   if (Elevator < 0.08)
@@ -99,11 +103,19 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
 }
 static VOID DH7_UnitRender( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
 {
-  static CHAR Buf[102];
+  static CHAR Buf[10000];
+  INT total_mem_kb = 0, cur_avail_mem_kb = 0;
+  glGetIntegerv(GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX, &total_mem_kb);
+  glGetIntegerv(GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX, &cur_avail_mem_kb);
 
-  sprintf(Buf, "CGSG Animation: FPS = %.5f %s %s %s", Ani->FPS, glGetString(GL_RENDERER), glGetString(GL_VENDOR), glGetString(GL_VERSION));
-  SetWindowText(Ani->hWnd, Buf);
+  sprintf(Buf, "FPS = %.5f\n %.2f MiB\n %.2f MiB\n CamX:%lf  CamY:%lf  CamZ:%lf", Ani->FPS, 
+                (total_mem_kb - cur_avail_mem_kb) / 1024.0,  total_mem_kb / 1024.0,
+                DH7_RndCamLoc.X, DH7_RndCamLoc.Y, DH7_RndCamLoc.Z);
+  DH7_RndFntDraw(Buf, VecSet(0, 0, 0), 30);
+
+
 }
+
 
 dh7UNIT * DH7_UnitCreateCTRL( VOID )
 {
@@ -114,5 +126,6 @@ dh7UNIT * DH7_UnitCreateCTRL( VOID )
   Uni->Init = (VOID *)DH7_UnitInit;
   Uni->Response = (VOID *)DH7_UnitResponse;
   Uni->Render = (VOID *)DH7_UnitRender;
+  Uni->Close = (VOID *)DH7_UnitClose;
   return (dh7UNIT *)Uni;
 }

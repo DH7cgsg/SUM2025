@@ -113,4 +113,5 @@ VOID APIENTRY glDebugOutput( UINT Source, UINT Type, UINT Id, UINT Severity,
   len += wsprintf(Buf + len, "\n\n");
  
   OutputDebugString(Buf);
+  printf("%s", Buf);
 } /* End of 'glDebugOutput' function */

@@ -38,7 +38,7 @@ void main( void )
           
 
 
-  vec4 tex_color = texture(Tex, vec2(phi, theta));                            
+  vec4 tex_color = texture(Tex, vec2(phi * 10, theta * 10));                            
   OutColor = vec4(tex_color.rgb,  1); 
 }
   

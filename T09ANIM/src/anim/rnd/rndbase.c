@@ -109,6 +109,10 @@ VOID DH7_RndInit( HWND hWnd )
   DH7_RndCamLoc = VecSet1(11);
   DH7_RndCamAt = VecSet(0, 2, 0);
   DH7_RndCamUp = VecSet(0, 1, 0);
+  DH7_RndCamMode = FALSE;
+  CamH = 10;
+  CamD = 10;
+  
   DH7_RndCamSet(DH7_RndCamLoc, DH7_RndCamAt, DH7_RndCamUp);
   DH7_RndCamDir = VecSet(-DH7_RndMatrView.A[0][2],
                          -DH7_RndMatrView.A[1][2],

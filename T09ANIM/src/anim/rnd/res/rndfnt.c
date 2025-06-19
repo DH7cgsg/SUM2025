@@ -82,6 +82,7 @@ VOID DH7_RndFntClose( VOID )
 VOID DH7_RndFntDraw( CHAR *Str, VEC Pos, FLT Size )
 {
   FLT startx = Pos.X;
+
  
   while (*Str != 0)
   {
@@ -94,7 +95,6 @@ VOID DH7_RndFntDraw( CHAR *Str, VEC Pos, FLT Size )
     {
       if (DH7_RndFntFont.AdvanceX[(BYTE)*Str] != 0)
       {
-        //DrawLetterCode(x0, y0, *str, r, g, b);  // VG4_RndFntChars[(BYTE)*Str]
         DH7_RndPrimDraw(&DH7_RndFntChars[(BYTE)*Str], MatrMulMatr(MatrScale(VecSet(Size, Size, 1)), MatrTranslate(Pos)));
         Pos.X += DH7_RndFntFont.AdvanceX[(BYTE)*Str] * Size;
       }

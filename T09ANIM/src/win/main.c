@@ -68,7 +68,6 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   /* Units initialization */
 
-  //DH7_AnimAddUnit(DH7_UnitCreateBall());
   DH7_AnimAddUnit(DH7_UnitCreateSKY());
   DH7_AnimAddUnit(DH7_UnitCreateCTRL());
   DH7_AnimAddUnit(DH7_UnitCreateGRID());

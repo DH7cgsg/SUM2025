@@ -31,7 +31,7 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
     0
   }; */
 
-  if ((hBm = LoadImage(NULL, "bin/heights/hf.bmp", IMAGE_BITMAP, 0, 0,
+  if ((hBm = LoadImage(NULL, "bin/heights/map.bmp", IMAGE_BITMAP, 0, 0,
                        LR_LOADFROMFILE | LR_CREATEDIBSECTION)) != NULL)
   {
     INT w, h, x, y;
@@ -46,11 +46,14 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
       for (y = 0; y < h; y++)
         for (x = 0; x < w; x++)
         {
+
           INT hgt = Bits[(h - 1 - y) * bm.bmWidthBytes + x];
-          VEC v = VecMulNum(VecSet(x / (w - 1.0) - 0.5,
-                                    hgt / 255.0 / 10,
-                                    1 - y / (h - 1.0) - 0.5), 100);
- 
+          VEC v = VecMulNum(VecSet(x / (w - 1.0),
+                                    hgt / 2000.0,
+                                    y / (h - 1.0)), 100);
+
+        
+          
           G.V[y * w + x].P = v;
           G.V[y * w + x].T = Vec2Set(5 * x / (w - 1.0), 5 * (1 - y / (h - 1.0)));
           

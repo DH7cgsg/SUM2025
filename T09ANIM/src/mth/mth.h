@@ -154,6 +154,12 @@ __inline FLT VecDotVec( VEC V1, VEC V2 )
   return V1.X * V2.X + V1.Y * V2.Y + V1.Z * V2.Z;
 }
 
+__inline BOOL VecCompare( VEC V1, VEC V2 )
+{
+  return V1.X == V2.X && V1.Y == V2.Y && V1.Z == V2.Z;
+}
+
+
 __inline VEC VecCrossVec( VEC V1, VEC V2 )
 {
   return VecSet(V1.Y * V2.Z - V1.Z * V2.Y, V1.Z * V2.X - V1.X * V2.Z, V1.X * V2.Y - V1.Y * V2.X);

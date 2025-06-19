@@ -138,6 +138,12 @@ VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
     glUniformMatrix4fv(loc, 1, FALSE, winv.A[0]);
   if ((loc = glGetUniformLocation(ProgId, "CamLoc")) != -1) 
     glUniform3fv(loc, 1, &DH7_RndCamLoc.X);
+  if ((loc = glGetUniformLocation(ProgId, "CamDir")) != -1) 
+    glUniform3fv(loc, 1, &DH7_RndCamDir.X);
+  if ((loc = glGetUniformLocation(ProgId, "CamRight")) != -1) 
+    glUniform3fv(loc, 1, &DH7_RndCamRight.X);
+  if ((loc = glGetUniformLocation(ProgId, "CamUp")) != -1) 
+    glUniform3fv(loc, 1, &DH7_RndCamUp.X);
   if ((loc = glGetUniformLocation(ProgId, "ProjSize")) != -1) 
     glUniform1f(loc, DH7_RndProjSize);  
   if ((loc = glGetUniformLocation(ProgId, "ProjDist")) != -1) 
@@ -153,7 +159,7 @@ VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
 
     Name[6] = '0' + i;
     if ((loc = glGetUniformLocation(ProgId, Name)) != -1) 
-      glUniform1f(loc, DH7_RndShdAddonI[i]);
+      glUniform1i(loc, DH7_RndShdAddonI[i]);
   }
 
 

@@ -20,7 +20,7 @@ static VOID DH7_UnitInit( dh7UNIT_SKY *Uni, dh7ANIM *Ani )
   mtl = DH7_RndMtlGetDef();
   strcpy(mtl.Name, "sky material");
   DH7_RndPrimCreate(&Uni->sky, DH7_RND_PRIM_POINTS, NULL, 1, NULL, 0);
-  mtl.Tex[0] = DH7_RndTexAddFromFile("bin/textures/starry_sky.bmp");
+  mtl.Tex[0] = DH7_RndTexAddFromFile("bin/textures/starry_sky1.bmp");
   mtl.ShdNo = DH7_RndShdAdd("sky");
   Uni->sky.MtlNo = DH7_RndMtlAdd(&mtl);
 }
@@ -47,5 +47,6 @@ dh7UNIT * DH7_UnitCreateSKY( VOID )
   Uni->Init = (VOID *)DH7_UnitInit;
   Uni->Response = (VOID *)DH7_UnitResponse;
   Uni->Render = (VOID *)DH7_UnitRender;
+  Uni->Close = (VOID *)DH7_UnitClose;
   return (dh7UNIT *)Uni;
 }

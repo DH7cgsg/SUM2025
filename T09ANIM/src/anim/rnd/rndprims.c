@@ -86,9 +86,13 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
     DWORD Shader;       /* Shader number (uses after load into memory) */
   } *mtls;
 
+  printf("Load %s: ", FileName);
   memset(Prs, 0, sizeof(dh7PRIMS));
   if ((F = fopen(FileName, "rb")) == NULL)
+  {
+    printf(" file is not found\n");
     return FALSE;
+  }
   /* Measure file length */
   fseek(F, 0, SEEK_END);
 
@@ -97,6 +101,7 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
   if ((mem = malloc(flen)) == NULL)
   {
     fclose(F);
+    printf(" not enough memory\n");
     return FALSE;
   }
   /* Load entire file into memory */
@@ -111,6 +116,7 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
   if (Sign != *(DWORD *)"G3DM")
   {
     free(mem);
+    printf(" not a .G3DM\n");
     return FALSE;
   }
    /* Quantities read */
@@ -124,6 +130,7 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
   if (!DH7_RndPrimsCreate(Prs, NumOfPrims))
   {
     free(mem);
+    printf(" error primitives creation\n");
     return FALSE;
   }
 
@@ -188,6 +195,6 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
     ptr += W * H * C;
   }
   free(mem);
+  printf(" ok - primitives %d, materials %d, textures %d\n", NumOfPrims, NumOfMaterials, NumOfTextures);
   return TRUE;
-
 }    /* End of 'DH7_RndPrimsDraw' function */

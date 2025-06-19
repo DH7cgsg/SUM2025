@@ -81,6 +81,8 @@ extern VEC
   DH7_RndCamAt,
   DH7_RndCamRight,
   DH7_RndCamUp;
+extern INT DH7_RndCamMode;
+extern FLT CamD, CamH;
 
 /* shader addons data */
 extern INT DH7_RndShdAddonI[5];
