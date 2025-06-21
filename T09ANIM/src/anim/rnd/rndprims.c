@@ -157,7 +157,7 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
     DH7_RndPrimCreate(&Prs->Prims[p], DH7_RND_PRIM_TRIMESH, V, NumOfVertexes, Ind, NumOfFacetIndexes);
     Prs->Prims[p].MtlNo = MtlNo + DH7_RndMaterialsSize;
   }
-   /* Materials */
+  /* Materials */
   mtls = (struct mtls *)ptr;
   ptr += sizeof(struct mtls) * NumOfMaterials;
   for (m = 0; m < (INT)NumOfMaterials; m++)
@@ -195,6 +195,17 @@ BOOL DH7_RndPrimsLoad( dh7PRIMS *Prs, CHAR *FileName )
     ptr += W * H * C;
   }
   free(mem);
+  if (NumOfPrims > 0)
+  {
+    Prs->MinBB = Prs->Prims[0].MinBB;
+    Prs->MaxBB = Prs->Prims[0].MaxBB;
+    for (p = 1; p < (INT)NumOfPrims; p++)
+    {
+      Prs->MinBB = VecMinVec(Prs->Prims[p].MinBB, Prs->MinBB);
+      Prs->MaxBB = VecMaxVec(Prs->Prims[p].MaxBB, Prs->MaxBB);
+    }
+  }
+
   printf(" ok - primitives %d, materials %d, textures %d\n", NumOfPrims, NumOfMaterials, NumOfTextures);
   return TRUE;
 }    /* End of 'DH7_RndPrimsDraw' function */

@@ -2,7 +2,7 @@
  * PROGRAMMER : DH7
 
  * LAST UPDATE: 05.06.2025
- * PURPOSE    : det computation
+ * PURPOSE    : det computation.
  *              Startup entry-point module.
  */
 #include <stdio.h>
@@ -12,14 +12,13 @@
 typedef double DBL;
 #define MAX 10
 
-
-
 INT P[MAX];
 BOOL IsParity;
 FILE *F;
 DBL M[MAX][MAX];
 INT N;
 DBL Det;
+static SYSTEMTIME st;
 
 BOOL LoadMatrix( CHAR *FileName )
 {
@@ -78,6 +77,7 @@ void Go( INT Pos )
 
 VOID main( VOID )
 {
+  DBL startMS, endMS, startS, endS;
   INT i;
 
   IsParity = TRUE;
@@ -85,9 +85,22 @@ VOID main( VOID )
 
   for (i = 0; i < N; i++)
     P[i] = i;
+  GetSystemTime(&st);
+  startMS = st.wMilliseconds;
+  startS = st.wSecond;
+  
   Go(0);
-  printf("det: %lf", Det);
+
+  GetSystemTime(&st);
+  endMS = st.wMilliseconds;
+  endS = st.wSecond;
+
+  printf("det: %lf\n", Det);
+  printf("Milliseconds: %lf\n", endMS - startMS);
+  printf("Seconds: %lf", endS - startS);
+
   _getch();
   fclose(F);
 }
 
+  

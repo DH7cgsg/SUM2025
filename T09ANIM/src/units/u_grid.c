@@ -35,6 +35,7 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
                        LR_LOADFROMFILE | LR_CREATEDIBSECTION)) != NULL)
   {
     INT w, h, x, y;
+    
 
     GetObject(hBm, sizeof(bm), &bm);
     w = bm.bmWidth;
@@ -42,8 +43,10 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
     if (bm.bmBitsPixel == 8 && DH7_RndGridCreate(&G, w, h))
     {
       BYTE *Bits = bm.bmBits;
+      
  
       for (y = 0; y < h; y++)
+      {
         for (x = 0; x < w; x++)
         {
           INT hgt = Bits[(h - 1 - y) * bm.bmWidthBytes + x];
@@ -52,14 +55,14 @@ static VOID DH7_UnitInit( dh7UNIT_GRID *Uni, dh7ANIM *Ani )
                                     hgt / 2000.0,
                                     1 - y / (h - 1.0)), 100); */
           DH7_Anim.MapHeights[y][x] = hgt;
-          //printf("%i\n", hgt);
+          
 
 
           G.V[y * w + x].P = v;
           G.V[y * w + x].T = Vec2Set(5 * x / (w - 1.0), 5 * (1 - y / (h - 1.0)));
-          
         }
-
+       
+      }
       mtl.Tex[0] = DH7_RndTexAddFromFile("bin/textures/chess.bmp");
       Uni->Land.MtlNo = DH7_RndMtlAdd(&mtl);
       DH7_RndGridAutoNormals(&G);

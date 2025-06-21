@@ -20,5 +20,6 @@ dh7UNIT * DH7_UnitCreateCTRL( VOID );
 dh7UNIT * DH7_UnitCreateGRID( VOID );
 dh7UNIT * DH7_UnitCreateModel( VOID );
 dh7UNIT * DH7_UnitCreateSKY( VOID );
+dh7UNIT * DH7_UnitCreateDEBUG( VOID );
 
 #endif  /* __units_h_ */

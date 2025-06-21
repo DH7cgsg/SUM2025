@@ -45,8 +45,8 @@ VOID DH7_RndPrimCreate( dh7PRIM *Pr, dh7PRIM_TYPE Type, dh7VERTEX *V, INT NoofV,
     Pr->MinBB = Pr->MaxBB = V[0].P;
     for (i = 1; i < NoofV; i++)
     {
-      Pr->MinBB = VecMinVec(Pr->MinBB, V[i].P);
-      Pr->MaxBB = VecMaxVec(Pr->MaxBB, V[i].P);
+       Pr->MinBB = VecMinVec(Pr->MinBB, V[i].P);
+       Pr->MaxBB = VecMaxVec(Pr->MaxBB, V[i].P);
     }
     
   }
@@ -152,6 +152,8 @@ VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
     glUniform1f(loc, DH7_RndFrameW);  
   if ((loc = glGetUniformLocation(ProgId, "FrameH")) != -1) 
     glUniform1f(loc, DH7_RndFrameH);
+  if ((loc = glGetUniformLocation(ProgId, "PlayerPos")) != -1) 
+    glUniform3fv(loc, 1, &DH7_Anim.PlayerPos.X);
 
   for (i = 0; i < 5; i++)
   {

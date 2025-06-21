@@ -59,7 +59,7 @@ struct tagdh7ANIM
     JX, JY, JZ, JR;                       /* Joystick axes */
 
   INT MapHeights[1152][1152]; //w, h
-
+  VEC PlayerPos;
 };
 
 extern dh7ANIM DH7_Anim;

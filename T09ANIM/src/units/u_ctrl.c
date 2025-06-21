@@ -16,10 +16,20 @@ typedef struct
 {
   DH7_UNIT_BASE_FIELDS;
   VEC CamLoc, CamDir;
+  //dh7PRIM Axes;
 } dh7UNIT_CTRL;
 
 static VOID DH7_UnitInit( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
 {
+  /*dh7MATERIAL mtl;
+
+  mtl = DH7_RndMtlGetDef();
+  strcpy(mtl.Name, "debug material");
+  DH7_RndPrimCreate(&Uni->Axes, DH7_RND_PRIM_POINTS, NULL, 1, NULL, 0);
+  mtl.ShdNo = DH7_RndShdAdd("debug");
+  Uni->Axes.MtlNo = DH7_RndMtlAdd(&mtl);
+  */
+
   Uni->CamLoc = VecSet1(11);
   Uni->CamDir =
     VecSet(-DH7_RndMatrView.A[0][2],
@@ -64,8 +74,8 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
      
 
   Elevator += Ani->GlobalDeltaTime *
-    (-100 * Ani->Keys[VK_LBUTTON] * Ani->Mdy +
-     40 * 1 * (Ani->Keys[VK_UP] - Ani->Keys[VK_DOWN]));
+    (-100 * Ani->Keys[VK_LBUTTON] * Ani->Mdy);
+     
 
   Dist += Ani->GlobalDeltaTime *
     (-1 * 300 * Ani->Mdz +
@@ -112,6 +122,8 @@ static VOID DH7_UnitRender( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
                 (total_mem_kb - cur_avail_mem_kb) / 1024.0,  total_mem_kb / 1024.0,
                 DH7_RndCamLoc.X, DH7_RndCamLoc.Y, DH7_RndCamLoc.Z);
   DH7_RndFntDraw(Buf, VecSet(0, 0, 0), 30);
+
+  //DH7_RndPrimDraw(&Uni->Axes, MatrIdentity());
 
 
 }
