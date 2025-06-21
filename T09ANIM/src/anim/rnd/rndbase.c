@@ -106,12 +106,12 @@ VOID DH7_RndInit( HWND hWnd )
 
   /* Set default render parameters */
   DH7_RndResize(100, 100);
-  DH7_RndCamLoc = VecSet1(11);
-  DH7_RndCamAt = VecSet(0, 2, 0);
+  DH7_RndCamLoc = VecSet(605, 300, 200);
+  DH7_RndCamAt = VecSet(605, 85, 550);
   DH7_RndCamUp = VecSet(0, 1, 0);
-  DH7_RndCamMode = FALSE;
-  CamH = 10;
-  CamD = 10;
+  DH7_RndCamMode = DH7_RND_CAM_FLYING;
+  CamH = 100;
+  CamD = 100;
   
   DH7_RndCamSet(DH7_RndCamLoc, DH7_RndCamAt, DH7_RndCamUp);
   DH7_RndResInit();

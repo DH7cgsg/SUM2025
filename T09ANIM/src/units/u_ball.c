@@ -1,7 +1,7 @@
 /* FILE NAME  : anim.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 10.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *          Common declaration module.
  */
 

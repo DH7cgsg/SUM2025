@@ -1,7 +1,7 @@
 /* FILE NAME  : rndres.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 18.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
                 Fonts handle module.
  *              
  */

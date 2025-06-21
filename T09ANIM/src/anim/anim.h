@@ -1,7 +1,7 @@
 /* FILE NAME  : anim.h
  * PROGRAMMER : DH7
  * LAST UPDATE: 10.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *          Common declaration module.
  */
  
@@ -58,7 +58,6 @@ struct tagdh7ANIM
   DBL
     JX, JY, JZ, JR;                       /* Joystick axes */
 
-  INT MapHeights[1152][1152]; //w, h
   VEC PlayerPos;
 };
 
@@ -72,6 +71,7 @@ VOID DH7_AnimCopyFrame();
 VOID DH7_AnimRender( VOID );
 VOID DH7_AnimFlipFullScreen( VOID );
 VOID DH7_AnimDoExit( VOID );
+VOID DH7_AnimFlipFullScreen( VOID );
 
 VOID DH7_AnimAddUnit( dh7UNIT *Uni );
 dh7UNIT * DH7_AnimUnitCreate( INT Size );

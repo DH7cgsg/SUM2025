@@ -159,6 +159,11 @@ __inline BOOL VecCompare( VEC V1, VEC V2 )
   return V1.X == V2.X && V1.Y == V2.Y && V1.Z == V2.Z;
 }
 
+__inline VEC VecCopy( VEC vSource )
+{
+  return VecSet(vSource.X, vSource.Y, vSource.Z);
+}
+
 
 __inline VEC VecCrossVec( VEC V1, VEC V2 )
 {

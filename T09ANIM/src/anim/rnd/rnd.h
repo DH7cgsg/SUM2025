@@ -81,8 +81,14 @@ extern VEC
   DH7_RndCamAt,
   DH7_RndCamRight,
   DH7_RndCamUp;
-extern INT DH7_RndCamMode;
+typedef enum tagdh7CAM_MODES
+{
+  DH7_RND_CAM_FLYING,
+  DH7_RND_CAM_LOCKED,
+} dh7CAM_MODES;
+
 extern FLT CamD, CamH;
+extern INT DH7_RndCamMode;
 
 /* shader addons data */
 extern INT DH7_RndShdAddonI[5];

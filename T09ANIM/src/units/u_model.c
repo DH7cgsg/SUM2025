@@ -1,17 +1,18 @@
 /* FILE NAME  : anim.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 10.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *          Common declaration module.
  */
 
 #include "units/units.h"
+#include "game/game.h"
 
 typedef struct 
 {
   DH7_UNIT_BASE_FIELDS;
   dh7PRIMS Prs;
-  VEC Pos, Vplane, Vy, g, Dir;
+  VEC Pos, Vplane, Vy, g, Orient;
   FLT AngleRot;
   
 } dh7UNIT_MODEL;
@@ -21,47 +22,49 @@ static VOID DH7_UnitInit( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
   VEC B;
 
   DH7_RndPrimsLoad(&Uni->Prs, "bin/models/yoshi.g3dm");
-  Uni->Pos = VecSet(605, 100, 558);
+  Uni->Pos = VecSet(605, 85, 558);
   DH7_Anim.PlayerPos = Uni->Pos;
   Uni->Vplane = VecSet(0, 0, 0);
   Uni->Vy = VecSet(0, 0, 0);
   Uni->g =  VecSet(0, 700, 0);
-  Uni->Dir = VecSet(1, 0, 0);
+  Uni->Orient = VecSet(0, 0, 1);
 
+  
   B = VecSubVec(Uni->Prs.MaxBB, Uni->Prs.MinBB);
   Uni->Prs.mTrans =
     MatrMulMatr(MatrTranslate(VecAddVec(VecNeg(Uni->Prs.MinBB), VecSet(-B.X / 2, 0, -B.Z / 2))), 
-                MatrScale(VecSet1(50 / B.Z)));
+                MatrScale(VecSet1(15 / B.Z)));
 }
 static VOID DH7_UnitResponse( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
   static CHAR buf[1000];
 
-  if (Ani->Keys[VK_RIGHT])
-    Uni->Vplane = VecAddVec(VecSet(200, 0, 0), Uni->Vplane);
-  if (Ani->Keys[VK_LEFT])
-    Uni->Vplane = VecAddVec(VecSet(-200, 0, 0), Uni->Vplane);
-  if (Ani->Keys[VK_DOWN])
-    Uni->Vplane = VecAddVec(VecSet(0, 0, 200), Uni->Vplane);
-  if (Ani->Keys[VK_UP])
-    Uni->Vplane = VecAddVec(VecSet(0, 0, -200), Uni->Vplane);
+  /* movement */
+  if (Ani->Keys['W'])
+    Uni->Vplane = VecAddVec(VecMulNum(Uni->Orient, 200), Uni->Vplane);
   if (Ani->KeysClick[VK_SPACE] && VecCompare(Uni->Vy, VecSet(0, 0, 0)))
     Uni->Vy = VecSet(0, 300, 0);
-  Uni->AngleRot += Ani->Keys['C'] * 200 * Ani->GlobalDeltaTime;
 
+  Uni->AngleRot += Ani->Keys[VK_RIGHT] * -200 * Ani->GlobalDeltaTime;
+  Uni->AngleRot += Ani->Keys[VK_LEFT] * 200 * Ani->GlobalDeltaTime;
+  
 
+  /* Pos and orient */
+  Uni->Orient = VectorTransform(VecSet(0, 0, 1), MatrRotateY(Uni->AngleRot));
+  
   Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->Vplane, Ani->GlobalDeltaTime));
   Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->Vy, Ani->GlobalDeltaTime));
+
+  /* Gravity */
+
   if (Uni->Pos.Y < 15)
   {
-    Uni->Pos = VecSet(605, 100, 558); 
+    Uni->Pos = VecSet(605, 85, 558); 
   }
   DH7_Anim.PlayerPos = Uni->Pos;
-
-
-  if (DH7_Anim.MapHeights[(INT)Uni->Pos.Z][(INT)Uni->Pos.X] != 0)
+  if (DH7_Game.MapHeights[(INT)Uni->Pos.Z][(INT)Uni->Pos.X] != 0)
   {
-    if (Uni->Pos.Y > 100 || Uni->Pos.Y < 90)
+    if (Uni->Pos.Y > 85 || Uni->Pos.Y < 75)
       Uni->Vy = VecSubVec(Uni->Vy, VecMulNum(Uni->g, Ani->GlobalDeltaTime));
     else 
       Uni->Vy = VecSet1(0);
@@ -69,22 +72,23 @@ static VOID DH7_UnitResponse( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
   else
   {
     Uni->Vy = VecSubVec(Uni->Vy, VecMulNum(Uni->g, Ani->GlobalDeltaTime));
-  }
-
-  
-  //AngleRot = R2D(acos(VecDotVec(VecNormalize(Uni->Dir), VecSet(1, 0, 0))));
-  //printf("AngleRot: %lf\n", AngleRot);
-  
-  if (!VecCompare(Uni->Vplane, VecSet(0, 0, 0)))
-       Uni->Dir = Uni->Vplane;
+  }  
   Uni->Vplane = VecSet(0, 0, 0);
 
-  if (Ani->KeysClick['V'])
+  /* Cam mode */
+  if (Ani->KeysClick[VK_F8])
     DH7_RndCamMode = !DH7_RndCamMode;
 
-  if (DH7_RndCamMode)
+  if (DH7_RndCamMode == DH7_RND_CAM_LOCKED)
   {
+    VEC poi;
+
+    poi = Uni->Pos;
+    poi = VecAddVec(VecAddVec(VecSet(0, CamH, 0), VecMulNum(VecNeg(VecNormalize(Uni->Orient)), CamD)), poi);
+    DH7_RndCamLoc = VecAddVec(DH7_RndCamLoc, VecMulNum(VecSubVec(poi, DH7_RndCamLoc), Ani->GlobalDeltaTime));
+    DH7_RndCamSet(DH7_RndCamLoc, Uni->Pos, VecSet(0, 1, 0));
   }
+
 }
 
 //p = MatrMulMatr(p, MatrScale(VecSet1(2)));
@@ -108,7 +112,7 @@ static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 
   memset(buf, 0, sizeof(buf));
 
-  sprintf(buf,"hgt:  %i", DH7_Anim.MapHeights[(INT)Uni->Pos.Z][(INT)Uni->Pos.X]);
+  sprintf(buf,"hgt:  %i", DH7_Game.MapHeights[(INT)Uni->Pos.Z][(INT)Uni->Pos.X]);
   DH7_RndFntDraw(buf, VecSet(0, -400, 0), 30);
 
   memset(buf, 0, sizeof(buf));

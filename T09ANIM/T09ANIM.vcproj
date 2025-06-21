@@ -297,6 +297,18 @@
 						</File>
 					</Filter>
 				</Filter>
+				<Filter
+					Name="Sound System"
+					>
+					<File
+						RelativePath=".\src\anim\snd\snd.c"
+						>
+					</File>
+					<File
+						RelativePath=".\src\anim\snd\snd.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Unit Samples"
@@ -322,11 +334,31 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_npc.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\u_sky.c"
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_water.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\units.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Game System"
+				>
+				<File
+					RelativePath=".\game\game.c"
+					>
+				</File>
+				<File
+					RelativePath=".\game\game.h"
 					>
 				</File>
 			</Filter>

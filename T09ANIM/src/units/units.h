@@ -1,7 +1,7 @@
 /* FILE NAME  : units.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 10.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *          Common declaration module.
  */
 
@@ -21,5 +21,7 @@ dh7UNIT * DH7_UnitCreateGRID( VOID );
 dh7UNIT * DH7_UnitCreateModel( VOID );
 dh7UNIT * DH7_UnitCreateSKY( VOID );
 dh7UNIT * DH7_UnitCreateDEBUG( VOID );
+dh7UNIT * DH7_UnitCreateWATER( VOID );
+dh7UNIT * DH7_UnitCreateNPC( VOID );
 
 #endif  /* __units_h_ */

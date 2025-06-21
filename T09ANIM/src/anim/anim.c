@@ -1,11 +1,12 @@
 /* FILE NAME  : anim.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 10.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *          Common declaration module.
  */
 
 #include "anim.h"
+#include "snd/snd.h"
 
 
 
@@ -22,6 +23,8 @@ VOID DH7_AnimInit( HWND hWnd )
 
   DH7_TimerInit();
   DH7_AnimInputInit();
+
+  DH7_SndInit();
 }
 
 VOID DH7_AnimClose( VOID )
@@ -34,6 +37,7 @@ VOID DH7_AnimClose( VOID )
     free(DH7_Anim.Units[i]);
   }
   DH7_RndClose();
+  DH7_SndClose();
   memset(&DH7_Anim, 0, sizeof(dh7ANIM));
 }
 
@@ -54,10 +58,16 @@ VOID DH7_AnimCopyFrame()
 VOID DH7_AnimRender( VOID )
 {
   INT i;
+  static BOOL OldIsActive;
   
   DH7_TimerResponse();
   if (DH7_Anim.IsActive)
+  {
+    if (!OldIsActive)
+      DH7_AnimInputInit();
     DH7_AnimInputResponse();
+  }
+  OldIsActive = DH7_Anim.IsActive;
   
   for (i = 0; i < DH7_Anim.NumOfUnits; i++)
     DH7_Anim.Units[i]->Response(DH7_Anim.Units[i], &DH7_Anim);
@@ -70,6 +80,38 @@ VOID DH7_AnimRender( VOID )
 
 VOID DH7_AnimFlipFullScreen( VOID )
 {
+  static BOOL IsFullScreen = FALSE;
+  static RECT SaveRc;
+
+  if (!IsFullScreen)
+  {
+    RECT rc;
+    HMONITOR hmon;
+    MONITORINFOEX moninfo;
+
+    GetWindowRect(DH7_Anim.hWnd, &SaveRc);
+    hmon = MonitorFromWindow(DH7_Anim.hWnd, MONITOR_DEFAULTTONEAREST);
+    moninfo.cbSize = sizeof(moninfo);
+    GetMonitorInfo(hmon, (MONITORINFO *)&moninfo);
+
+    rc.left = 0;
+    rc.top = 0;
+    rc.right = GetSystemMetrics(SM_CXSCREEN);
+    rc.bottom = GetSystemMetrics(SM_CYSCREEN);
+
+    rc  = moninfo.rcMonitor;
+    AdjustWindowRect(&rc, GetWindowLong(DH7_Anim.hWnd, GWL_STYLE), FALSE);
+
+    SetWindowPos(DH7_Anim.hWnd, HWND_TOP, rc.left, rc.top, rc.right, rc.bottom + 201, SWP_NOOWNERZORDER);
+    IsFullScreen = TRUE;
+  }
+  else 
+  {
+    SetWindowPos(DH7_Anim.hWnd, HWND_TOP, SaveRc.left, SaveRc.top, SaveRc.right - SaveRc.left, 
+                                              SaveRc.bottom - SaveRc.top, SWP_NOOWNERZORDER);
+    IsFullScreen = FALSE;
+
+  }
 }
 
 VOID DH7_AnimDoExit( VOID )

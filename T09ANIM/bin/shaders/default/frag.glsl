@@ -8,6 +8,7 @@ in vec3 DrawPos;
 in vec2 DrawTexCoord;
 
 layout(binding = 0) uniform sampler2D Tex;
+
 uniform bool IsTexture0;
 uniform float Time;
 uniform float GlobalTime;
@@ -16,10 +17,10 @@ uniform float Ph;
 uniform vec3 CamLoc;
 
 uniform int AddonI0, AddonI1;
-                                    
+
 vec3 Shade( vec3 P, vec3 N )
 {
-  vec3 LPos = vec3(100, 500, 100); 
+  vec3 LPos = vec3(576, 700, 324); 
   vec3 L = normalize(LPos - P);
   vec3 LC = vec3(1, 1, 1);
   
@@ -42,10 +43,7 @@ vec3 Shade( vec3 P, vec3 N )
   
 }
 
- 
 void main( void )
-{     
-  if (AddonI0 > 20)
-     discard;                         
+{                      
   OutColor = vec4(Shade(DrawPos, normalize(DrawNormal)), 1); 
 }

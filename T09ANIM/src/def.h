@@ -1,7 +1,7 @@
 /* FILE NAME  : def.h
  * PROGRAMMER : DH7
  * LAST UPDATE: 09.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *          Common declaration module.
  */
  

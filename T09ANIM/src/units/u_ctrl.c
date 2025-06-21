@@ -1,7 +1,7 @@
 /* FILE NAME  : u_ctrl.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 11.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *          Control unit module.
  */
 
@@ -50,6 +50,10 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
     Ani->IsPause = !Ani->IsPause;
   if (Ani->Keys[VK_CONTROL] && Ani->KeysClick['F'])
     DH7_RndCamSet(VecSet1(11), VecSet(0, 2, 0), VecSet(0, 1, 0));
+  if (Ani->KeysClick[VK_F11])
+    DH7_AnimFlipFullScreen();
+  if (Ani->KeysClick[VK_ESCAPE])
+    PostQuitMessage(0);
   
   /* Cam movement */
   /*Uni->CamLoc =

@@ -1,7 +1,7 @@
 /* FILE NAME  : input.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 11.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *          input module
  */
 
@@ -15,7 +15,15 @@ INT DH7_MouseWheel;
 
 static VOID DH7_AnimKeyboardInit( VOID )
 {
-  
+  INT i;
+
+  GetKeyboardState(DH7_Anim.Keys);
+  for (i = 0; i < 256; i++)
+  {
+    DH7_Anim.Keys[i] >>= 7;
+    DH7_Anim.KeysClick[i] = 0;  
+  }
+  memcpy(DH7_Anim.KeysOld, DH7_Anim.Keys, 256);
 }
 static VOID DH7_AnimKeyboardResponse( VOID )
 {
@@ -33,10 +41,20 @@ static VOID DH7_AnimKeyboardResponse( VOID )
 }
 static VOID DH7_AnimMouseInit( VOID )
 {
+  POINT pt;
+ 
   /* Default values */
-  DH7_Anim.Mx = 0;
-  DH7_Anim.My = 0;
-  DH7_Anim.Mz = 0;
+  GetCursorPos(&pt);
+  ScreenToClient(DH7_Anim.hWnd, &pt);
+ 
+  /* Cords eval */
+  DH7_Anim.Mdx = 0;
+  DH7_Anim.Mdy = 0;
+  /* Abs values */
+  DH7_Anim.Mx = pt.x;
+  DH7_Anim.My = pt.y;
+
+  DH7_Anim.Mdz = 0;
   DH7_MouseWheel = 0;
 }
 static VOID DH7_AnimMouseResponse( VOID )

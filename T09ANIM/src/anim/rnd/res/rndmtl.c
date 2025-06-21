@@ -1,7 +1,7 @@
 /* FILE NAME  : rndmtl.c
  * PROGRAMMER : DH7
  * LAST UPDATE: 13.06.2025
- * PURPOSE    : 3D animation project.
+ * PURPOSE    : 3D game project.
  *              Rendering materials module.
  */
 
