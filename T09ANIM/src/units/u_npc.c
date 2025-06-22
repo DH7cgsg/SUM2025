@@ -11,6 +11,7 @@ typedef struct
 {
   DH7_UNIT_BASE_FIELDS;
   dh7PRIMS PrNPC;
+  dh7PRIM DialogBox;
   VEC Pos, Orient;
   FLT AngleRot;
   
@@ -19,8 +20,15 @@ typedef struct
 static VOID DH7_UnitInit( dh7UNIT_NPC *Uni, dh7ANIM *Ani )
 {
   VEC B;
+  dh7MATERIAL mtl;
 
+  mtl = DH7_RndMtlGetDef();
+  strcpy(mtl.Name, "npc material");
+  DH7_RndPrimCreate(&Uni->DialogBox, DH7_RND_PRIM_POINTS, NULL, 1, NULL, 0);
+  mtl.ShdNo = DH7_RndShdAdd("npc");
+  Uni->DialogBox.MtlNo = DH7_RndMtlAdd(&mtl);
   DH7_RndPrimsLoad(&Uni->PrNPC, "bin/models/kirby.g3dm");
+
   Uni->Pos = VecSet(540, 85, 530);
   Uni->Orient = VecSet(0, 0, 1);
 
@@ -42,12 +50,15 @@ static VOID DH7_UnitRender( dh7UNIT_NPC *Uni, dh7ANIM *Ani )
   m = MatrRotateY(30);
   m = MatrMulMatr(m, MatrTranslate(Uni->Pos));
 
+
   DH7_RndPrimsDraw(&Uni->PrNPC, m);
+  DH7_RndPrimDraw(&Uni->DialogBox, MatrIdentity());
 
 }
 static VOID DH7_UnitClose( dh7UNIT_NPC *Uni, dh7ANIM *Ani )
 {
   DH7_RndPrimsFree(&Uni->PrNPC);
+  DH7_RndPrimFree(&Uni->DialogBox);
 }
 
 dh7UNIT * DH7_UnitCreateNPC( VOID )

@@ -354,11 +354,11 @@
 				Name="Game System"
 				>
 				<File
-					RelativePath=".\game\game.c"
+					RelativePath=".\src\game\game.c"
 					>
 				</File>
 				<File
-					RelativePath=".\game\game.h"
+					RelativePath=".\src\game\game.h"
 					>
 				</File>
 			</Filter>

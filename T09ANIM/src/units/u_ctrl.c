@@ -16,20 +16,11 @@ typedef struct
 {
   DH7_UNIT_BASE_FIELDS;
   VEC CamLoc, CamDir;
-  //dh7PRIM Axes;
 } dh7UNIT_CTRL;
 
 static VOID DH7_UnitInit( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
 {
-  /*dh7MATERIAL mtl;
-
-  mtl = DH7_RndMtlGetDef();
-  strcpy(mtl.Name, "debug material");
-  DH7_RndPrimCreate(&Uni->Axes, DH7_RND_PRIM_POINTS, NULL, 1, NULL, 0);
-  mtl.ShdNo = DH7_RndShdAdd("debug");
-  Uni->Axes.MtlNo = DH7_RndMtlAdd(&mtl);
-  */
-
+ 
   Uni->CamLoc = VecSet1(11);
   Uni->CamDir =
     VecSet(-DH7_RndMatrView.A[0][2],
@@ -54,15 +45,6 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
     DH7_AnimFlipFullScreen();
   if (Ani->KeysClick[VK_ESCAPE])
     PostQuitMessage(0);
-  
-  /* Cam movement */
-  /*Uni->CamLoc =
-    VecAddVec(Uni->CamLoc,
-       VecMulNum(Uni->CamDir, Ani->GlobalDeltaTime * Ani->Mdz * 10)); */
-  /* Uni->CamLoc =
-    PointTransform(Uni->CamLoc,
-      MatrRotateY(Ani->Keys[VK_LBUTTON] *
-                  Ani->DeltaTime * Ani->Mdx * -200)); */
 
   Dist = VecLen(VecSubVec(DH7_RndCamAt, DH7_RndCamLoc));
   cosT = (DH7_RndCamLoc.Y - DH7_RndCamAt.Y) / Dist;
@@ -127,7 +109,6 @@ static VOID DH7_UnitRender( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
                 DH7_RndCamLoc.X, DH7_RndCamLoc.Y, DH7_RndCamLoc.Z);
   DH7_RndFntDraw(Buf, VecSet(0, 0, 0), 30);
 
-  //DH7_RndPrimDraw(&Uni->Axes, MatrIdentity());
 
 
 }

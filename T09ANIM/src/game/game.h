@@ -15,6 +15,7 @@ typedef struct tagdh7GAME dh7GAME;
 struct tagdh7GAME
 {
   INT MapHeights[648][1152];
+  BOOL NpcIsTalking;
 };
 
 extern dh7GAME DH7_Game;

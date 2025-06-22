@@ -21,7 +21,7 @@ static VOID DH7_UnitInit( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
   VEC B;
 
-  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/yoshi.g3dm");
+  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/konteynrer.g3dm");
   Uni->Pos = VecSet(605, 85, 558);
   DH7_Anim.PlayerPos = Uni->Pos;
   Uni->Vplane = VecSet(0, 0, 0);
