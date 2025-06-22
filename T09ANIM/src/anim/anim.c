@@ -110,6 +110,7 @@ VOID DH7_AnimFlipFullScreen( VOID )
     SetWindowPos(DH7_Anim.hWnd, HWND_TOP, SaveRc.left, SaveRc.top, SaveRc.right - SaveRc.left, 
                                               SaveRc.bottom - SaveRc.top, SWP_NOOWNERZORDER);
     IsFullScreen = FALSE;
+    
 
   }
 }

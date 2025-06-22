@@ -152,8 +152,6 @@ VOID DH7_RndPrimDraw( dh7PRIM *Pr, MATR World )
     glUniform1f(loc, DH7_RndFrameW);  
   if ((loc = glGetUniformLocation(ProgId, "FrameH")) != -1) 
     glUniform1f(loc, DH7_RndFrameH);
-  if ((loc = glGetUniformLocation(ProgId, "PlayerPos")) != -1) 
-    glUniform3fv(loc, 1, &DH7_Anim.PlayerPos.X);
 
   for (i = 0; i < 5; i++)
   {

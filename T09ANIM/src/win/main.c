@@ -74,6 +74,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   DH7_AnimAddUnit(DH7_UnitCreateModel());
   DH7_AnimAddUnit(DH7_UnitCreateDEBUG());
   DH7_AnimAddUnit(DH7_UnitCreateNPC());
+  DH7_AnimAddUnit(DH7_UnitCreateSTAR());
   DH7_AnimAddUnit(DH7_UnitCreateWATER());
 
 

@@ -342,6 +342,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_star.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\u_water.c"
 					>
 				</File>

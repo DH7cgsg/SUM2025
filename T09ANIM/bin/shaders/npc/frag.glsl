@@ -18,9 +18,9 @@ uniform vec3 CamLoc;
 
 uniform int AddonI0, AddonI1;
 
-vec3 Shade( vec3 P, vec3 N, vec3 Light )
+vec3 Shade( vec3 P, vec3 N )
 {
-  vec3 LPos = Light; 
+  vec3 LPos = vec3(576, 700, 324); 
   vec3 L = normalize(LPos - P);
   vec3 LC = vec3(1, 1, 1);
   
@@ -45,6 +45,5 @@ vec3 Shade( vec3 P, vec3 N, vec3 Light )
 
 void main( void )
 {                      
-  OutColor = vec4(Shade(DrawPos, normalize(DrawNormal), vec3(-100, 700, 700)), 1)
-           + vec4(Shade(DrawPos, normalize(DrawNormal), vec3(260, 700, 420)), 1); 
+  OutColor = vec4(Shade(DrawPos, normalize(DrawNormal)), 1); 
 }

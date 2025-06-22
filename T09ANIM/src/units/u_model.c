@@ -21,9 +21,8 @@ static VOID DH7_UnitInit( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
   VEC B;
 
-  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/konteynrer.g3dm");
+  DH7_RndPrimsLoad(&Uni->Prs, "bin/models/yoshi.g3dm");
   Uni->Pos = VecSet(605, 85, 558);
-  DH7_Anim.PlayerPos = Uni->Pos;
   Uni->Vplane = VecSet(0, 0, 0);
   Uni->Vy = VecSet(0, 0, 0);
   Uni->g =  VecSet(0, 700, 0);
@@ -55,13 +54,28 @@ static VOID DH7_UnitResponse( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
   Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->Vplane, Ani->GlobalDeltaTime));
   Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->Vy, Ani->GlobalDeltaTime));
 
+  DH7_Game.PlayerPos = Uni->Pos;
+
+  /* Flags */
+
+  if ((DH7_Game.PlayerPos.X > 65 && DH7_Game.PlayerPos.X < 105) &&
+         DH7_Game.PlayerPos.Z > 550 && DH7_Game.PlayerPos.Z < 590)
+         DH7_Game.StarIsTaken = TRUE;
+    
+  if (DH7_Game.StarIsTaken) 
+  {
+    if ((DH7_Game.PlayerPos.X > 540 && DH7_Game.PlayerPos.X < 560) &&
+         DH7_Game.PlayerPos.Z > 530 && DH7_Game.PlayerPos.Z < 550)
+         DH7_Game.StarIsDelivered = TRUE;
+  }
+
   /* Gravity */
 
   if (Uni->Pos.Y < 15)
   {
     Uni->Pos = VecSet(605, 85, 558); 
+    DH7_Game.StarIsTaken = FALSE;
   }
-  DH7_Anim.PlayerPos = Uni->Pos;
   if (DH7_Game.MapHeights[(INT)Uni->Pos.Z][(INT)Uni->Pos.X] != 0)
   {
     if (Uni->Pos.Y > 85 || Uni->Pos.Y < 75)
@@ -91,8 +105,6 @@ static VOID DH7_UnitResponse( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 
 }
 
-//p = MatrMulMatr(p, MatrScale(VecSet1(2)));
-  //p = MatrMulMatr(p, MatrMulMatr(MatrTranslate(Uni->Pos), MatrTranslate(VecSet(-4, 0, 86))));
 
 static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {
@@ -106,24 +118,11 @@ static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
   p = MatrMulMatr(p, MatrRotateY(Uni->AngleRot));
   p = MatrMulMatr(p, MatrTranslate(Uni->Pos));
   
-  
   sprintf(buf,"Player Pos:  %i, %i, %i", (INT)Uni->Pos.X, (INT)Uni->Pos.Y, (INT)Uni->Pos.Z);
   DH7_RndFntDraw(buf, VecSet(0, -200, 0), 30);
-
-  memset(buf, 0, sizeof(buf));
-
-  sprintf(buf,"hgt:  %i", DH7_Game.MapHeights[(INT)Uni->Pos.Z][(INT)Uni->Pos.X]);
-  DH7_RndFntDraw(buf, VecSet(0, -400, 0), 30);
-
   memset(buf, 0, sizeof(buf));
 
   DH7_RndPrimsDraw(&Uni->Prs, p);
-
-
-
-
-
-
 }
 static VOID DH7_UnitClose( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
 {

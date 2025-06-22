@@ -46,56 +46,58 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
   if (Ani->KeysClick[VK_ESCAPE])
     PostQuitMessage(0);
 
-  Dist = VecLen(VecSubVec(DH7_RndCamAt, DH7_RndCamLoc));
-  cosT = (DH7_RndCamLoc.Y - DH7_RndCamAt.Y) / Dist;
-  sinT = sqrt(1 - cosT * cosT);
-  plen = Dist * sinT;
-  cosP = (DH7_RndCamLoc.Z - DH7_RndCamAt.Z) / plen;
-  sinP = (DH7_RndCamLoc.X - DH7_RndCamAt.X) / plen;
-  Azimuth = R2D(atan2(sinP, cosP));
-  Elevator = R2D(atan2(sinT, cosT));
+  if (DH7_RndCamMode == DH7_RND_CAM_FLYING)
+  {
+    Dist = VecLen(VecSubVec(DH7_RndCamAt, DH7_RndCamLoc));
+    cosT = (DH7_RndCamLoc.Y - DH7_RndCamAt.Y) / Dist;
+    sinT = sqrt(1 - cosT * cosT);
+    plen = Dist * sinT;
+    cosP = (DH7_RndCamLoc.Z - DH7_RndCamAt.Z) / plen;
+    sinP = (DH7_RndCamLoc.X - DH7_RndCamAt.X) / plen;
+    Azimuth = R2D(atan2(sinP, cosP));
+    Elevator = R2D(atan2(sinT, cosT));
 
-  Azimuth += Ani->GlobalDeltaTime *
-    (-300 * Ani->Keys[VK_LBUTTON] * Ani->Mdx);
+    Azimuth += Ani->GlobalDeltaTime *
+      (-300 * Ani->Keys[VK_LBUTTON] * Ani->Mdx);
      
 
-  Elevator += Ani->GlobalDeltaTime *
-    (-100 * Ani->Keys[VK_LBUTTON] * Ani->Mdy);
+    Elevator += Ani->GlobalDeltaTime *
+      (-100 * Ani->Keys[VK_LBUTTON] * Ani->Mdy);
      
 
-  Dist += Ani->GlobalDeltaTime *
-    (-1 * 300 * Ani->Mdz +
-     8 * (1 + Ani->Keys[VK_SHIFT] * 30) *
-        (Ani->Keys[VK_NEXT] - Ani->Keys[VK_PRIOR]));
+    Dist += Ani->GlobalDeltaTime *
+      (-1 * 300 * Ani->Mdz +
+       8 * (1 + Ani->Keys[VK_SHIFT] * 30) *
+          (Ani->Keys[VK_NEXT] - Ani->Keys[VK_PRIOR]));
      
-  if (Elevator < 0.08)
-      Elevator = 0.08;
-  if (Elevator > 178)
-      Elevator = 178;
-  if (Dist < 0.1)
-      Dist = 0.1; 
+    if (Elevator < 0.08)
+        Elevator = 0.08;
+    if (Elevator > 178)
+        Elevator = 178;
+    if (Dist < 0.1)
+        Dist = 0.1; 
 
-  Wp = DH7_RndProjSize;
-  Hp = DH7_RndProjSize;
+    Wp = DH7_RndProjSize;
+    Hp = DH7_RndProjSize;
      
-  if (Ani->W > Ani->H)
-    Wp *= (FLT)Ani->W / Ani->H;
-  else
-    Hp *= (FLT)Ani->H / Ani->W;
+    if (Ani->W > Ani->H)
+      Wp *= (FLT)Ani->W / Ani->H;
+    else
+      Hp *= (FLT)Ani->H / Ani->W;
      
-  sx = Ani->Keys[VK_RBUTTON] * -Ani->Mdx * Wp / Ani->W * Dist / DH7_RndProjDist;
-  sy = Ani->Keys[VK_RBUTTON] * Ani->Mdy * Hp / Ani->H * Dist / DH7_RndProjDist;
+    sx = Ani->Keys[VK_RBUTTON] * -Ani->Mdx * Wp / Ani->W * Dist / DH7_RndProjDist;
+    sy = Ani->Keys[VK_RBUTTON] * Ani->Mdy * Hp / Ani->H * Dist / DH7_RndProjDist;
 
-  dv = VecAddVec(VecMulNum(DH7_RndCamRight, sx),
+    dv = VecAddVec(VecMulNum(DH7_RndCamRight, sx),
                    VecMulNum(DH7_RndCamUp, sy));
-  DH7_RndCamAt = VecAddVec(DH7_RndCamAt, dv);
-  DH7_RndCamLoc = VecAddVec(DH7_RndCamLoc, dv);
+    DH7_RndCamAt = VecAddVec(DH7_RndCamAt, dv);
+    DH7_RndCamLoc = VecAddVec(DH7_RndCamLoc, dv);
      
-  DH7_RndCamSet(PointTransform(VecSet(0, Dist, 0),
+    DH7_RndCamSet(PointTransform(VecSet(0, Dist, 0),
                                  MatrMulMatr3(MatrRotateX(Elevator),
                                               MatrRotateY(Azimuth),
                                               MatrTranslate(DH7_RndCamAt))), DH7_RndCamAt, VecSet(0, 1, 0));
-
+  }
 }
 static VOID DH7_UnitRender( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
 {
