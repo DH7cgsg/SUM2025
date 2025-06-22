@@ -40,7 +40,7 @@ static VOID DH7_UnitResponse( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
   if (Ani->KeysClick['P'])
     Ani->IsPause = !Ani->IsPause;
   if (Ani->Keys[VK_CONTROL] && Ani->KeysClick['F'])
-    DH7_RndCamSet(VecSet1(11), VecSet(0, 2, 0), VecSet(0, 1, 0));
+    DH7_RndCamSet(VecSet(605, 300, 200), VecSet(605, 85, 550), VecSet(0, 1, 0));
   if (Ani->KeysClick[VK_F11])
     DH7_AnimFlipFullScreen();
   if (Ani->KeysClick[VK_ESCAPE])
@@ -105,10 +105,13 @@ static VOID DH7_UnitRender( dh7UNIT_CTRL *Uni, dh7ANIM *Ani )
   INT total_mem_kb = 0, cur_avail_mem_kb = 0;
   glGetIntegerv(GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX, &total_mem_kb);
   glGetIntegerv(GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX, &cur_avail_mem_kb);
-
+  /*
   sprintf(Buf, "FPS = %.5f\n %.2f MiB\n %.2f MiB\n CamX:%lf  CamY:%lf  CamZ:%lf", Ani->FPS, 
                 (total_mem_kb - cur_avail_mem_kb) / 1024.0,  total_mem_kb / 1024.0,
                 DH7_RndCamLoc.X, DH7_RndCamLoc.Y, DH7_RndCamLoc.Z);
+                */
+  sprintf(Buf, "FPS = %.5f\n", Ani->FPS);
+                
   DH7_RndFntDraw(Buf, VecSet(0, 0, 0), 30);
 
 

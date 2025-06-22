@@ -118,9 +118,9 @@ static VOID DH7_UnitRender( dh7UNIT_MODEL *Uni, dh7ANIM *Ani )
   p = MatrMulMatr(p, MatrRotateY(Uni->AngleRot));
   p = MatrMulMatr(p, MatrTranslate(Uni->Pos));
   
-  sprintf(buf,"Player Pos:  %i, %i, %i", (INT)Uni->Pos.X, (INT)Uni->Pos.Y, (INT)Uni->Pos.Z);
-  DH7_RndFntDraw(buf, VecSet(0, -200, 0), 30);
-  memset(buf, 0, sizeof(buf));
+  //sprintf(buf,"Player Pos:  %i, %i, %i", (INT)Uni->Pos.X, (INT)Uni->Pos.Y, (INT)Uni->Pos.Z);
+  //DH7_RndFntDraw(buf, VecSet(0, -200, 0), 30);
+  //memset(buf, 0, sizeof(buf));
 
   DH7_RndPrimsDraw(&Uni->Prs, p);
 }
